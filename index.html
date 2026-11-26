@@ -802,19 +802,43 @@ function openNovel() {
   show('novel');
 }
 
-function openChapter(n) {
-  if (chapters[n] === null || chapters[n] === undefined) return;
+async function openChapter(n) {
+  const chapter = chapters[n];
+
+  if (chapter === null || chapter === undefined) return;
 
   current = n;
 
-  document.getElementById('chapterTitle').textContent =
-    chapters[n].split('\n')[0];
-
-  document.getElementById('chapterText').textContent = chapters[n];
-
-  localStorage.setItem('lastChapter', n);
+  const title = document.getElementById('chapterTitle');
+  const content = document.getElementById('chapterText');
 
   show('reader');
+
+  if (n === 1) {
+    title.textContent = chapter.split('\n')[0];
+    content.textContent = chapter;
+  } else {
+    title.textContent = chapter.title;
+    content.textContent = 'Loading chapter...';
+
+    try {
+      const response = await fetch(chapter.file);
+
+      if (!response.ok) {
+        throw new Error('Chapter file not found');
+      }
+
+      const text = await response.text();
+      content.textContent = text;
+
+    } catch (error) {
+      content.textContent = 'Sorry, this chapter could not be loaded.';
+      return;
+    }
+  }
+
+  localStorage.setItem('lastChapter', n);
+}
 }
 
 function changeChapter(d) {
