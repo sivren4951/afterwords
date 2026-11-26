@@ -732,122 +732,123 @@ As his childhood friend, Chi Zhiyang was even more anxious than Nan Yi himself. 
 Nan Yi's tone was always so certain.
 
 "They'll bring it back."",
- 2:"Your second chapter will go here.",
- 3:"Your third chapter will go here."
+ 2:null,
+3:null
 };
-let current=1;
-function show(id){
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- window.scrollTo(0,0);
-}
-function openNovel(){
- const list=document.getElementById('chapters');
- list.innerHTML='';
- Object.keys(chapters).forEach(n=>{
-  const item=document.createElement('div');
-  item.className='chapter';
-  item.textContent='Chapter '+n+' →';
-  item.onclick=()=>openChapter(Number(n));
-  list.appendChild(item);
- });
- show('novel');
-}
-function openChapter(n){
- current=n;
- document.getElementById('chapterTitle').textContent='Chapter '+n;
- document.getElementById('chapterText').textContent=chapters[n];
- show('reader');
-}
-function changeChapter(d){
- if(chapters[current+d])openChapter(current+d);
-}
-function filterBooks(){
- const q=document.getElementById('search').val]
 
-`,
-let current=1;
-let readerSize=Number(localStorage.getItem('readerSize'))||18;
+let current = 1;
+let readerSize = Number(localStorage.getItem('readerSize')) || 18;
 
-function show(id){
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- window.scrollTo(0,0);
+function show(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
 }
 
-function openNovel(){
- const list=document.getElementById('chapters');
- list.innerHTML='';
+function openNovel() {
+  const list = document.getElementById('chapters');
+  list.innerHTML = '';
 
- Object.keys(chapters).forEach(n=>{
-  const item=document.createElement('div');
-  item.className='chapter';
-  const available=chapters[n]!==null;
-  item.textContent='Chapter '+n+' · '+(available?'Available →':'Coming soon');
-  item.style.opacity=available?'1':'.5';
+  Object.keys(chapters).forEach(n => {
+    const item = document.createElement('div');
+    item.className = 'chapter';
 
-  if(available)item.onclick=()=>openChapter(Number(n));
-  list.appendChild(item);
- });
+    const available = chapters[n] !== null;
 
- const last=Number(localStorage.getItem('lastChapter'))||0;
- document.getElementById('progressLabel').textContent=
-  last?'Last read: Chapter '+last:'Your reading journey starts here.';
- document.getElementById('progressBar').style.width=
-  (last/3*100)+'%';
- show('novel');
+    item.textContent = 'Chapter ' + n + ' · ' +
+      (available ? 'Available →' : 'Coming soon');
+
+    item.style.opacity = available ? '1' : '.5';
+
+    if (available) {
+      item.onclick = () => openChapter(Number(n));
+    }
+
+    list.appendChild(item);
+  });
+
+  const last = Number(localStorage.getItem('lastChapter')) || 0;
+
+  document.getElementById('progressLabel').textContent =
+    last ? 'Last read: Chapter ' + last : 'Your reading journey starts here.';
+
+  document.getElementById('progressBar').style.width =
+    (last / 3 * 100) + '%';
+
+  show('novel');
 }
 
-function openChapter(n){
- if(chapters[n]===null)return;
- current=n;
- document.getElementById('chapterTitle').textContent=
-  chapters[n].split('\n')[0];
- document.getElementById('chapterText').textContent=chapters[n];
- localStorage.setItem('lastChapter',n);
- show('reader');
+function openChapter(n) {
+  if (chapters[n] === null || chapters[n] === undefined) return;
+
+  current = n;
+
+  document.getElementById('chapterTitle').textContent =
+    chapters[n].split('\n')[0];
+
+  document.getElementById('chapterText').textContent = chapters[n];
+
+  localStorage.setItem('lastChapter', n);
+
+  show('reader');
 }
 
-function changeChapter(d){
- if(chapters[current+d]!==null && chapters[current+d]!==undefined){
-  openChapter(current+d);
- }
+function changeChapter(d) {
+  if (chapters[current + d] !== null &&
+      chapters[current + d] !== undefined) {
+    openChapter(current + d);
+  }
 }
 
-function changeFont(amount){
- readerSize=Math.max(14,Math.min(30,readerSize+amount));
- document.documentElement.style.setProperty('--reader-size',readerSize+'px');
- localStorage.setItem('readerSize',readerSize);
+function changeFont(amount) {
+  readerSize = Math.max(14, Math.min(30, readerSize + amount));
+
+  document.documentElement.style.setProperty(
+    '--reader-size', readerSize + 'px'
+  );
+
+  localStorage.setItem('readerSize', readerSize);
 }
 
-function toggleTheme(){
- document.body.classList.toggle('dark');
- localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');
+function toggleTheme() {
+  document.body.classList.toggle('dark');
+
+  localStorage.setItem(
+    'theme',
+    document.body.classList.contains('dark') ? 'dark' : 'light'
+  );
 }
 
-function toggleBookmark(){
- let saved=JSON.parse(localStorage.getItem('bookmarks')||'[]');
- if(saved.includes(current)){
-  saved=saved.filter(n=>n!==current);
-  alert('Bookmark removed.');
- }else{
-  saved.push(current);
-  alert('Chapter bookmarked!');
- }
- localStorage.setItem('bookmarks',JSON.stringify(saved));
+function toggleBookmark() {
+  let saved = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+
+  if (saved.includes(current)) {
+    saved = saved.filter(n => n !== current);
+    alert('Bookmark removed.');
+  } else {
+    saved.push(current);
+    alert('Chapter bookmarked!');
+  }
+
+  localStorage.setItem('bookmarks', JSON.stringify(saved));
 }
 
-function filterBooks(){
- const q=document.getElementById('search').value.toLowerCase();
- document.querySelectorAll('#books .book').forEach(b=>{
-  b.style.display=b.dataset.name.includes(q)?'':'none';
- });
+function filterBooks() {
+  const q = document.getElementById('search').value.toLowerCase();
+
+  document.querySelectorAll('#books .book').forEach(b => {
+    b.style.display = b.dataset.name.includes(q) ? '' : 'none';
+  });
 }
 
-if(localStorage.getItem('theme')==='dark'){
- document.body.classList.add('dark');
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark');
 }
-document.documentElement.style.setProperty('--reader-size',readerSize+'px');
+
+document.documentElement.style.setProperty(
+  '--reader-size', readerSize + 'px'
+);
+
 </script>
 </body>
 </html>
