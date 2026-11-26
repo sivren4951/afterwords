@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>afterwords. | Stories worth getting lost in</title>
+<style>
+:root {
+ --bg:#f4eee5; --paper:#e9dfd2; --ink:#493c35;
+ --muted:#89796b; --line:#d8cbbb; --accent:#a58b73;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,serif}
+header{padding:25px 8%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
+.logo{font-size:29px;letter-spacing:-1px}
+nav{display:flex;gap:25px}
+nav a{font:10px Arial;letter-spacing:1.5px;color:var(--muted);text-decoration:none;cursor:pointer}
+nav a:hover{color:var(--ink)}
+main{max-width:1050px;margin:auto;padding:55px 8%}
+.page{display:none}.page.active{display:block}
+.eyebrow{font:10px Arial;letter-spacing:3px;color:var(--muted)}
+.hero{padding:45px 0 70px}
+h1{font-size:clamp(45px,7vw,76px);font-weight:normal;line-height:1.08;margin:22px 0}
+h2{font-size:29px;font-weight:normal}
+p{color:var(--muted);line-height:1.9}
+button{background:var(--ink);color:white;border:0;padding:14px 22px;cursor:pointer;font:10px Arial;letter-spacing:1.5px}
+button:hover{background:var(--accent)}
+.feature{background:var(--paper);padding:38px;margin:18px 0 65px;cursor:pointer}
+.feature h2{margin:15px 0}
+.sectionhead{display:flex;justify-content:space-between;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+.book{background:var(--paper);padding:25px;min-height:190px;cursor:pointer}
+.book:hover{outline:1px solid var(--accent)}
+.book .num{font-size:27px;color:var(--muted)}
+.book h3{font-size:21px;font-weight:normal}
+.book small{color:var(--muted)}
+input{width:100%;padding:15px;background:var(--paper);border:1px solid var(--line);font:15px Georgia;color:var(--ink);margin:20px 0}
+.chapter{padding:20px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.chapter:hover{padding-left:10px}
+.reader{max-width:670px;margin:35px auto;font-size:18px;line-height:2.1}
+.reader p{color:var(--ink)}
+.reader h1{font-size:39px}
+.controls{display:flex;justify-content:space-between;margin-top:45px}
+footer{text-align:center;border-top:1px solid var(--line);padding:35px;color:var(--muted);font:10px Arial;letter-spacing:2px}
+@media(max-width:600px){
+ header{padding:20px;flex-wrap:wrap;gap:18px}
+ nav{gap:14px}
+ main{padding:35px 23px}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">afterwords.</div>
+ <nav>
+  <a onclick="show('home')">HOME</a>
+  <a onclick="show('library')">LIBRARY</a>
+  <a onclick="show('about')">ABOUT</a>
+ </nav>
+</header>
+<main>
+<section id="home" class="page active">
+ <div class="hero">
+  <div class="eyebrow">A LITTLE CORNER FOR STORIES</div>
+  <h1>Stories worth<br>getting lost in.</h1>
+  <p>A quiet little archive of translated stories, words and worlds. Made with love, for readers everywhere.</p>
+  <button onclick="show('library')">EXPLORE THE LIBRARY →</button>
+ </div>
+ <div class="eyebrow">FEATURED TRANSLATION</div>
+ <div class="feature" onclick="openNovel()">
+  <div class="eyebrow">01 — CURRENT FEATURE</div>
+  <h2>A Moment in the Stars</h2>
+  <p>恒星时刻 · A story waiting to be discovered.</p>
+  <span>READ THE STORY →</span>
+ </div>
+ <div class="sectionhead"><h2>The library</h2><a onclick="show('library')">View all →</a></div>
+ <div class="grid">
+  <div class="book" onclick="openNovel()">
+   <div class="num">01.</div><h3>A Moment in the Stars</h3><small>恒星时刻 · Ongoing</small>
+  </div>
+ </div>
+</section>
+<section id="library" class="page">
+ <div class="eyebrow">THE COLLECTION</div><h1>The library.</h1>
+ <p>A collection of stories translated with care.</p>
+ <input id="search" placeholder="Search stories..." oninput="filterBooks()">
+ <div class="grid" id="books">
+  <div class="book" data-name="a moment in the stars 恒星时刻" onclick="openNovel()">
+   <div class="num">01.</div><h3>A Moment in the Stars</h3><small>恒星时刻 · Ongoing</small>
+  </div>
+ </div>
+</section>
+<section id="novel" class="page">
+ <div class="eyebrow">THE COLLECTION / 01</div>
+ <h1>A Moment in the Stars</h1>
+ <p>恒星时刻</p>
+ <p>A story about music, memories and the people who change our lives.</p>
+ <div class="eyebrow">CHAPTER DIRECTORY</div>
+ <div id="chapters"></div>
+</section>
+<section id="reader" class="page">
+ <div class="reader">
+  <div class="eyebrow">A MOMENT IN THE STARS</div>
+  <h1 id="chapterTitle">Chapter 1</h1>
+  <div id="chapterText"></div>
+  <div class="controls">
+   <button onclick="changeChapter(-1)">← PREVIOUS</button>
+   <button onclick="changeChapter(1)">NEXT →</button>
+  </div>
+  <p style="text-align:center"><a onclick="openNovel()">← Back to chapters</a></p>
+ </div>
+</section>
+<section id="about" class="page">
+ <div class="eyebrow">A NOTE FROM THE TRANSLATOR</div>
+ <h1>About afterwords.</h1>
+ <p>Welcome to my little corner of the internet. A space dedicated to stories, translations and the love of reading.</p>
+ <p>Every translation is a labour of love. Thank you for being here.</p>
+ <p>All original works belong to their respective authors and rights holders.</p>
+</section>
+</main>
+<footer>AFTERWORDS. · A LITTLE CORNER FOR STORIES</footer>
+<script>
+const chapters={
+ 1:"Your first chapter will go here. Replace this sample with your translated text.",
+ 2:"Your second chapter will go here.",
+ 3:"Your third chapter will go here."
+};
+let current=1;
+function show(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ window.scrollTo(0,0);
+}
+function openNovel(){
+ const list=document.getElementById('chapters');
+ list.innerHTML='';
+ Object.keys(chapters).forEach(n=>{
+  const item=document.createElement('div');
+  item.className='chapter';
+  item.textContent='Chapter '+n+' →';
+  item.onclick=()=>openChapter(Number(n));
+  list.appendChild(item);
+ });
+ show('novel');
+}
+function openChapter(n){
+ current=n;
+ document.getElementById('chapterTitle').textContent='Chapter '+n;
+ document.getElementById('chapterText').textContent=chapters[n];
+ show('reader');
+}
+function changeChapter(d){
+ if(chapters[current+d])openChapter(current+d);
+}
+function filterBooks(){
+ const q=document.getElementById('search').value.toLowerCase();
+ document.querySelectorAll('#books .book').forEach(b=>{
+  b.style.display=b.dataset.name.includes(q)?'':'none';
+ });
+}
+</script>
+</body>
+</html>
