@@ -4,52 +4,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>afterwords. | Stories worth getting lost in</title>
+<title>afterwords. — Sternstude</title>
 <style>
- #chapterText {
-  white-space: pre-wrap;
-}
 :root {
- --bg:#f4eee5; --paper:#e9dfd2; --ink:#493c35;
- --muted:#89796b; --line:#d8cbbb; --accent:#a58b73;
+ --bg:#f4eee5;
+ --paper:#e9dfd2;
+ --ink:#493c35;
+ --muted:#89796b;
+ --line:#d8cbbb;
+ --accent:#a58b73;
+ --reader-size:18px;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,serif}
-header{padding:25px 8%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
-.logo{font-size:29px;letter-spacing:-1px}
-nav{display:flex;gap:25px}
-nav a{font:10px Arial;letter-spacing:1.5px;color:var(--muted);text-decoration:none;cursor:pointer}
-nav a:hover{color:var(--ink)}
+body{
+ margin:0;background:var(--bg);color:var(--ink);
+ font-family:Georgia,serif;transition:.25s;
+}
+body.dark{
+ --bg:#211d1c;--paper:#302927;--ink:#eadfd3;
+ --muted:#b09d8e;--line:#493b36;--accent:#c1a187;
+}
+header{
+ padding:24px 8%;display:flex;justify-content:space-between;
+ align-items:center;border-bottom:1px solid var(--line);
+}
+.logo{font-size:30px;letter-spacing:-1.5px}
+nav{display:flex;gap:22px}
+nav a,.textlink{
+ font:10px Arial;letter-spacing:1.5px;color:var(--muted);
+ text-decoration:none;cursor:pointer
+}
+nav a:hover,.textlink:hover{color:var(--accent)}
 main{max-width:1050px;margin:auto;padding:55px 8%}
-.page{display:none}.page.active{display:block}
+.page{display:none}
+.page.active{display:block}
 .eyebrow{font:10px Arial;letter-spacing:3px;color:var(--muted)}
-.hero{padding:45px 0 70px}
-h1{font-size:clamp(45px,7vw,76px);font-weight:normal;line-height:1.08;margin:22px 0}
-h2{font-size:29px;font-weight:normal}
+.hero{padding:65px 0 75px}
+h1{font-size:clamp(45px,7vw,78px);font-weight:normal;line-height:1.08;margin:22px 0}
+h2{font-size:30px;font-weight:normal}
 p{color:var(--muted);line-height:1.9}
-button{background:var(--ink);color:white;border:0;padding:14px 22px;cursor:pointer;font:10px Arial;letter-spacing:1.5px}
+button{
+ background:var(--ink);color:var(--bg);border:0;padding:14px 20px;
+ cursor:pointer;font:10px Arial;letter-spacing:1.5px;
+}
 button:hover{background:var(--accent)}
-.feature{background:var(--paper);padding:38px;margin:18px 0 65px;cursor:pointer}
-.feature h2{margin:15px 0}
-.sectionhead{display:flex;justify-content:space-between;align-items:center}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
-.book{background:var(--paper);padding:25px;min-height:190px;cursor:pointer}
-.book:hover{outline:1px solid var(--accent)}
-.book .num{font-size:27px;color:var(--muted)}
-.book h3{font-size:21px;font-weight:normal}
+.feature{
+ background:var(--paper);padding:40px;margin:20px 0 65px;
+ cursor:pointer;border:1px solid var(--line);
+}
+.feature:hover,.book:hover{outline:1px solid var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px}
+.book{background:var(--paper);padding:25px;min-height:180px;cursor:pointer;border:1px solid var(--line)}
+.book h3{font-size:22px;font-weight:normal}
+.book .num{font-size:25px;color:var(--muted)}
 .book small{color:var(--muted)}
-input{width:100%;padding:15px;background:var(--paper);border:1px solid var(--line);font:15px Georgia;color:var(--ink);margin:20px 0}
+input{
+ width:100%;padding:15px;background:var(--paper);
+ border:1px solid var(--line);font:15px Georgia;color:var(--ink);
+ margin:20px 0;
+}
 .chapter{padding:20px 0;border-bottom:1px solid var(--line);cursor:pointer}
-.chapter:hover{padding-left:10px}
-.reader{max-width:670px;margin:35px auto;font-size:18px;line-height:2.1}
-.reader p{color:var(--ink)}
+.chapter:hover{padding-left:10px;color:var(--accent)}
+.reader{max-width:680px;margin:35px auto;font-size:var(--reader-size);line-height:2.1}
 .reader h1{font-size:39px}
-.controls{display:flex;justify-content:space-between;margin-top:45px}
+#chapterText{white-space:pre-wrap;color:var(--ink);line-height:2.1}
+.reader-tools{display:flex;flex-wrap:wrap;gap:8px;margin:25px 0;padding:15px 0;border-block:1px solid var(--line)}
+.reader-tools button{padding:11px}
+.controls{display:flex;justify-content:space-between;gap:10px;margin-top:45px}
+.progress{height:4px;background:var(--line);margin:15px 0}
+#progressBar{height:4px;background:var(--accent);width:0}
 footer{text-align:center;border-top:1px solid var(--line);padding:35px;color:var(--muted);font:10px Arial;letter-spacing:2px}
 @media(max-width:600px){
  header{padding:20px;flex-wrap:wrap;gap:18px}
- nav{gap:14px}
+ nav{gap:13px}
  main{padding:35px 23px}
+ .hero{padding:35px 0 55px}
+ .controls button{padding:12px 9px}
 }
 </style>
 </head>
@@ -62,71 +92,96 @@ footer{text-align:center;border-top:1px solid var(--line);padding:35px;color:var
   <a onclick="show('about')">ABOUT</a>
  </nav>
 </header>
+
 <main>
 <section id="home" class="page active">
  <div class="hero">
   <div class="eyebrow">A LITTLE CORNER FOR STORIES</div>
-  <h1>Stories worth<br>getting lost in.</h1>
-  <p>A quiet little archive of translated stories, words and worlds. Made with love, for readers everywhere.</p>
+  <h1>Some stories<br>stay with us.</h1>
+  <p>An independent archive of translated stories, words and worlds. Made with love, for readers everywhere.</p>
   <button onclick="show('library')">EXPLORE THE LIBRARY →</button>
  </div>
- <div class="eyebrow">FEATURED TRANSLATION</div>
+
+ <div class="eyebrow">CURRENTLY TRANSLATING · 01</div>
  <div class="feature" onclick="openNovel()">
-  <div class="eyebrow">01 — CURRENT FEATURE</div>
-  <h2>Sternstude</h2>
-  <p>恒星时刻 · A story waiting to be discovered.</p>
-  <span>READ THE STORY →</span>
+  <div class="eyebrow">FEATURED TRANSLATION</div>
+  <h2>Sternstunde</h2>
+  <p>稚楚 · Zhichu</p>
+  <span>ENTER THE STORY →</span>
  </div>
- <div class="sectionhead"><h2>The library</h2><a onclick="show('library')">View all →</a></div>
+
+ <h2>The library</h2>
  <div class="grid">
   <div class="book" onclick="openNovel()">
-   <div class="num">01.</div><h3>A Moment in the Stars</h3><small>恒星时刻 · Ongoing</small>
+   <div class="num">01.</div>
+   <h3>Sternstunde</h3>
+   <small>Zhichu · Ongoing</small>
   </div>
  </div>
 </section>
+
 <section id="library" class="page">
- <div class="eyebrow">THE COLLECTION</div><h1>The library.</h1>
- <p>A collection of stories translated with care.</p>
+ <div class="eyebrow">THE COLLECTION</div>
+ <h1>The library.</h1>
+ <p>Stories translated with care.</p>
  <input id="search" placeholder="Search stories..." oninput="filterBooks()">
  <div class="grid" id="books">
-  <div class="book" data-name="a moment in the stars 恒星时刻" onclick="openNovel()">
-   <div class="num">01.</div><h3>A Moment in the Stars</h3><small>恒星时刻 · Ongoing</small>
+  <div class="book" data-name="sternstunde zhichu">
+   <div onclick="openNovel()">
+    <div class="num">01.</div>
+    <h3>Sternstunde</h3>
+    <small>Zhichu · Ongoing</small>
+   </div>
   </div>
  </div>
 </section>
+
 <section id="novel" class="page">
  <div class="eyebrow">THE COLLECTION / 01</div>
- <h1>Sternstude</h1>
- <p>恒星时刻</p>
- <p>A story about music, memories and the people who change our lives.</p>
+ <h1>Sternstunde.</h1>
+ <p>By Zhichu (稚楚)</p>
+ <p>A story of music, memories and the people who change our lives.</p>
+ <div class="progress"><div id="progressBar"></div></div>
+ <p id="progressLabel">Your reading journey starts here.</p>
  <div class="eyebrow">CHAPTER DIRECTORY</div>
  <div id="chapters"></div>
 </section>
+
 <section id="reader" class="page">
  <div class="reader">
-  <div class="eyebrow">A MOMENT IN THE STARS</div>
+  <div class="eyebrow">AFTERWORDS. / STERNSTUNDE</div>
   <h1 id="chapterTitle">Chapter 1</h1>
+  <div class="reader-tools">
+   <button onclick="changeFont(-1)">A−</button>
+   <button onclick="changeFont(1)">A+</button>
+   <button onclick="toggleBookmark()">♡ BOOKMARK</button>
+   <button onclick="toggleTheme()">☾ THEME</button>
+  </div>
   <div id="chapterText"></div>
   <div class="controls">
    <button onclick="changeChapter(-1)">← PREVIOUS</button>
    <button onclick="changeChapter(1)">NEXT →</button>
   </div>
-  <p style="text-align:center"><a onclick="openNovel()">← Back to chapters</a></p>
+  <p style="text-align:center"><a class="textlink" onclick="openNovel()">← BACK TO CHAPTERS</a></p>
  </div>
 </section>
+
 <section id="about" class="page">
  <div class="eyebrow">A NOTE FROM THE TRANSLATOR</div>
  <h1>About afterwords.</h1>
  <p>Welcome to my little corner of the internet. A space dedicated to stories, translations and the love of reading.</p>
  <p>Every translation is a labour of love. Thank you for being here.</p>
- <p>All original works belong to their respective authors and rights holders.</p>
+ <p>All original works belong to their respective authors and rights holders. This is an unofficial fan translation.</p>
 </section>
 </main>
+
 <footer>AFTERWORDS. · A LITTLE CORNER FOR STORIES</footer>
+
 <script>
-const chapters={
- 1:"Chapter 1: Turned Away at the Door
-[That bassist kid is definitely going to make it big.]
+const chapters = {
+  1: `Chapter 1: Turned Away at the Door
+
+[[That bassist kid is definitely going to make it big.]
 
 Zhou Huai would later come to suspect that this message had been nothing but a spectacularly ill-fated prediction. Less than three seconds after he received it, the live house plunged into darkness, bringing the performance to an abrupt halt.
 
@@ -708,11 +763,91 @@ function changeChapter(d){
  if(chapters[current+d])openChapter(current+d);
 }
 function filterBooks(){
+ const q=document.getElementById('search').val]
+
+`,
+let current=1;
+let readerSize=Number(localStorage.getItem('readerSize'))||18;
+
+function show(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ window.scrollTo(0,0);
+}
+
+function openNovel(){
+ const list=document.getElementById('chapters');
+ list.innerHTML='';
+
+ Object.keys(chapters).forEach(n=>{
+  const item=document.createElement('div');
+  item.className='chapter';
+  const available=chapters[n]!==null;
+  item.textContent='Chapter '+n+' · '+(available?'Available →':'Coming soon');
+  item.style.opacity=available?'1':'.5';
+
+  if(available)item.onclick=()=>openChapter(Number(n));
+  list.appendChild(item);
+ });
+
+ const last=Number(localStorage.getItem('lastChapter'))||0;
+ document.getElementById('progressLabel').textContent=
+  last?'Last read: Chapter '+last:'Your reading journey starts here.';
+ document.getElementById('progressBar').style.width=
+  (last/3*100)+'%';
+ show('novel');
+}
+
+function openChapter(n){
+ if(chapters[n]===null)return;
+ current=n;
+ document.getElementById('chapterTitle').textContent=
+  chapters[n].split('\n')[0];
+ document.getElementById('chapterText').textContent=chapters[n];
+ localStorage.setItem('lastChapter',n);
+ show('reader');
+}
+
+function changeChapter(d){
+ if(chapters[current+d]!==null && chapters[current+d]!==undefined){
+  openChapter(current+d);
+ }
+}
+
+function changeFont(amount){
+ readerSize=Math.max(14,Math.min(30,readerSize+amount));
+ document.documentElement.style.setProperty('--reader-size',readerSize+'px');
+ localStorage.setItem('readerSize',readerSize);
+}
+
+function toggleTheme(){
+ document.body.classList.toggle('dark');
+ localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');
+}
+
+function toggleBookmark(){
+ let saved=JSON.parse(localStorage.getItem('bookmarks')||'[]');
+ if(saved.includes(current)){
+  saved=saved.filter(n=>n!==current);
+  alert('Bookmark removed.');
+ }else{
+  saved.push(current);
+  alert('Chapter bookmarked!');
+ }
+ localStorage.setItem('bookmarks',JSON.stringify(saved));
+}
+
+function filterBooks(){
  const q=document.getElementById('search').value.toLowerCase();
  document.querySelectorAll('#books .book').forEach(b=>{
   b.style.display=b.dataset.name.includes(q)?'':'none';
  });
 }
+
+if(localStorage.getItem('theme')==='dark'){
+ document.body.classList.add('dark');
+}
+document.documentElement.style.setProperty('--reader-size',readerSize+'px');
 </script>
 </body>
 </html>
