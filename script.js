@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   "use strict";
 
+
   // -----------------------------------------------------
   // 01. CONFIGURATION
   // -----------------------------------------------------
@@ -244,54 +245,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
     paragraphs.forEach(paragraph => {
       const element = document.createElement("p");
+
       const pattern = /\[\[([\s\S]*?)\|([\s\S]*?)\]\]/g;
 
       let lastIndex = 0;
       let match;
 
       while ((match = pattern.exec(paragraph)) !== null) {
+
+        // Add the text before the note
+
         element.appendChild(
-          document.createTextNode(paragraph.slice(lastIndex, match.index))
+          document.createTextNode(
+            paragraph.slice(lastIndex, match.index)
+          )
         );
 
+        // Create the clickable phrase
+
         const note = document.createElement("button");
+
         note.type = "button";
         note.className = "translation-note";
         note.textContent = match[1];
         note.dataset.note = match[2];
+        note.setAttribute(
+          "aria-label",
+          `${match[1]} — click to read an explanation`
+        );
 
         element.appendChild(note);
+
         lastIndex = pattern.lastIndex;
       }
 
+      // Add the remaining paragraph text
+
       element.appendChild(
-        document.createTextNode(paragraph.slice(lastIndex))
+        document.createTextNode(
+          paragraph.slice(lastIndex)
+        )
       );
 
       readerContent.appendChild(element);
     });
   }
 
-  // Open and close translation notes
 
-  readerContent.addEventListener("click", event => {
-    const note = event.target.closest(".translation-note");
+  // Load a chapter from its text file
 
-    if (!note) {
-      document.querySelectorAll(".translation-note.active")
-        .forEach(item => item.classList.remove("active"));
-      return;
-    }
-
-    document.querySelectorAll(".translation-note.active")
-      .forEach(item => {
-        if (item !== note) item.classList.remove("active");
-      });
-
-    note.classList.toggle("active");
-  });
-
-   async function openChapter(number) {
+  async function openChapter(number) {
     number = Number(number);
 
     const chapter = chapters[number];
@@ -367,6 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const errorMessage = document.createElement("p");
 
       errorMessage.className = "reader-message";
+
       errorMessage.textContent =
         "The chapter couldn't be opened. Please check that the chapter file exists in your chapters folder and that you're viewing the website through GitHub Pages.";
 
@@ -675,7 +679,30 @@ document.addEventListener("DOMContentLoaded", () => {
   // 16. CLICKABLE TRANSLATION NOTES
   // -----------------------------------------------------
 
- 
+  document.addEventListener("click", event => {
+
+    if (!(event.target instanceof Element)) return;
+
+    const note = event.target.closest(".translation-note");
+
+    // Close other open notes
+
+    document.querySelectorAll(".translation-note.active").forEach(item => {
+      if (item !== note) {
+        item.classList.remove("active");
+      }
+    });
+
+    // Toggle the selected note
+
+    if (note) {
+      note.classList.toggle("active");
+      event.stopPropagation();
+    }
+
+  });
+
+
   // -----------------------------------------------------
   // 17. READY
   // -----------------------------------------------------
