@@ -231,74 +231,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Render paragraphs and clickable translation notes
 
-function renderChapterText(text) {
-  if (!readerContent) return;
+  function renderChapterText(text) {
+    if (!readerContent) return;
 
-  readerContent.replaceChildren();
+    readerContent.replaceChildren();
 
-  const paragraphs = text
-    .replace(/\r\n/g, "\n")
-    .trim()
-    .split(/\n\s*\n/)
-    .filter(paragraph => paragraph.trim().length > 0);
+    const paragraphs = text
+      .replace(/\r\n/g, "\n")
+      .trim()
+      .split(/\n\s*\n/)
+      .filter(paragraph => paragraph.trim().length > 0);
 
-  paragraphs.forEach(paragraph => {
-    const element = document.createElement("p");
-    const pattern = /\[\[([\s\S]*?)\|([\s\S]*?)\]\]/g;
+    paragraphs.forEach(paragraph => {
+      const element = document.createElement("p");
+      const pattern = /\[\[([\s\S]*?)\|([\s\S]*?)\]\]/g;
 
-    let lastIndex = 0;
-    let match;
+      let lastIndex = 0;
+      let match;
 
-    while ((match = pattern.exec(paragraph)) !== null) {
-      element.appendChild(
-        document.createTextNode(paragraph.slice(lastIndex, match.index))
-      );
-
-      const note = document.createElement("button");
-      note.type = "button";
-      note.className = "translation-note";
-      note.textContent = match[1];
-      note.dataset.note = match[2];
-
-      element.appendChild(note);
-      lastIndex = pattern.lastIndex;
-    }
-
-    element.appendChild(
-      document.createTextNode(paragraph.slice(lastIndex))
-    );
-
-    readerContent.appendChild(element);
-  });
-}
-
-        // Add the text before the note
-
+      while ((match = pattern.exec(paragraph)) !== null) {
         element.appendChild(
-          document.createTextNode(
-            paragraph.slice(lastIndex, match.index)
-          )
+          document.createTextNode(paragraph.slice(lastIndex, match.index))
         );
 
-        // Create the clickable phrase
-
-        const note = document.createElement("span");
+        const note = document.createElement("button");
+        note.type = "button";
         note.className = "translation-note";
         note.textContent = match[1];
+        note.dataset.note = match[2];
 
-        // Create its explanation
-
-        const popup = document.createElement("span");
-        popup.className = "note-popup";
-        popup.textContent = match[2];
-
-        note.appendChild(popup);
         element.appendChild(note);
-
-        lastIndex = notePattern.lastIndex;
+        lastIndex = pattern.lastIndex;
       }
-
-      // Add the remaining paragraph text
 
       element.appendChild(
         document.createTextNode(paragraph.slice(lastIndex))
@@ -308,8 +272,26 @@ function renderChapterText(text) {
     });
   }
 
+  // Open and close translation notes
 
-  async function openChapter(number) {
+  readerContent.addEventListener("click", event => {
+    const note = event.target.closest(".translation-note");
+
+    if (!note) {
+      document.querySelectorAll(".translation-note.active")
+        .forEach(item => item.classList.remove("active"));
+      return;
+    }
+
+    document.querySelectorAll(".translation-note.active")
+      .forEach(item => {
+        if (item !== note) item.classList.remove("active");
+      });
+
+    note.classList.toggle("active");
+  });
+
+   async function openChapter(number) {
     number = Number(number);
 
     const chapter = chapters[number];
@@ -693,62 +675,7 @@ function renderChapterText(text) {
   // 16. CLICKABLE TRANSLATION NOTES
   // -----------------------------------------------------
 
-  const noteStyle = document.createElement("style");
-
-  noteStyle.textContent = `
-    .translation-note {
-      position: relative;
-      display: inline-block;
-      color: #927e69;
-      border-bottom: 1px dotted #927e69;
-      cursor: pointer;
-    }
-
-    .note-popup {
-      display: none;
-      position: absolute;
-      left: 0;
-      bottom: 1.8em;
-      width: 230px;
-      max-width: 75vw;
-      padding: 12px 14px;
-      background: #f5f0e7;
-      color: #49443e;
-      border: 1px solid #ded5c8;
-      border-radius: 6px;
-      font-size: 13px;
-      line-height: 1.6;
-      font-weight: normal;
-      z-index: 100;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-    }
-
-    .translation-note.active .note-popup {
-      display: block;
-    }
-  `;
-
-  document.head.appendChild(noteStyle);
-
-
-  // Open and close notes when clicked
-
-  document.addEventListener("click", event => {
-    const note = event.target.closest(".translation-note");
-
-    document.querySelectorAll(".translation-note.active").forEach(item => {
-      if (item !== note) {
-        item.classList.remove("active");
-      }
-    });
-
-    if (note) {
-      note.classList.toggle("active");
-      event.stopPropagation();
-    }
-  });
-
-
+ 
   // -----------------------------------------------------
   // 17. READY
   // -----------------------------------------------------
