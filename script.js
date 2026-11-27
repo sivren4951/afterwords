@@ -761,3 +761,15 @@ document.querySelectorAll("[data-chapter]").forEach(link => {
 
 
 });
+document.addEventListener("click", function(event) {
+  const note = event.target.closest(".translation-note");
+
+  document.querySelectorAll(".translation-note.active").forEach(item => {
+    if (item !== note) item.classList.remove("active");
+  });
+
+  if (note) {
+    note.classList.toggle("active");
+    event.stopPropagation();
+  }
+});
