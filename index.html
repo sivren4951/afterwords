@@ -4,844 +4,102 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eee8dc">
 
-  <title>marginalia. — A Reader-Made Literary Archive</title>
+  <title>fanmei — translations by Sivren</title>
+  <meta name="description" content="Chinese danmei fan translations by Sivren.">
 
-  <meta name="description" content="An independent literary archive of reader-made webnovel translations, maintained by Sivren.">
-
-  <meta name="author" content="Sivren">
-  <meta name="theme-color" content="#171715">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
-
-  <script src="script.js" defer></script>
 </head>
 
 <body>
 
-  <!-- READING PROGRESS -->
-  <div class="reading-progress-track">
-    <div id="reading-progress"></div>
-  </div>
+  <header class="header">
+    <a class="logo" href="#home">fanmei</a>
 
-  <!-- HEADER -->
-  <header class="site-header">
-
-    <a href="#home" class="wordmark">marginalia.</a>
-
-    <nav id="site-navigation" class="site-navigation">
-      <a href="#home" data-nav="home">Home</a>
-      <a href="#archive" data-nav="archive">The archive</a>
-      <a href="#margins" data-nav="margins">The margins</a>
-      <a href="#about" data-nav="about">About</a>
+    <nav class="navigation">
+      <a href="#home">Home</a>
+      <a href="#archive">Archive</a>
+      <a href="#about">About</a>
     </nav>
-
-    <a href="#colophon" class="header-credit">
-      A project by Sivren ↗
-    </a>
-
-    <button id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation">
-      ☰
-    </button>
-
   </header>
 
+  <main id="home">
 
-  <main>
+    <section class="welcome">
+      <p class="welcome-label">CHINESE DANMEI · ENGLISH FAN TRANSLATIONS</p>
 
-    <!-- =====================================
-         HOME
-    ====================================== -->
+      <h1>Welcome to <em>fanmei.</em></h1>
 
-    <section id="home" data-page="home" class="page active">
-
-      <div class="home-hero">
-
-        <div class="hero-overline">
-          <span>AN INDEPENDENT LITERARY ARCHIVE</span>
-          <span>VOL. 01 / EST. 2026</span>
-        </div>
-
-        <div class="hero-label">
-          A PLACE FOR STORIES IN TRANSLATION
-        </div>
-
-        <h1>
-          For the stories<br>
-          we couldn't<br>
-          find elsewhere.
-        </h1>
-
-        <p class="hero-description">
-          A small, ongoing archive of webnovel translations —
-          made by a reader who got tired of searching for them.
-        </p>
-
-        <a href="#archive" class="text-link">
-          ENTER THE ARCHIVE ↗
-        </a>
-
-        <div class="hero-mark">
-          <span>M / 001</span>
-          <div class="hero-monogram">
-            m<br>
-            a<br>
-            r.
-          </div>
-        </div>
-
-      </div>
-
-
-      <div class="home-divider">
-        <span>NOTES FROM THE MARGINS</span>
-        <span>AND ELSEWHERE ✳</span>
-      </div>
-
-      <div class="home-caption">
-        COLLECTED WORDS · TRANSLATED STORIES · OPEN TABS
-      </div>
-
-
-      <!-- FEATURED STORY -->
-
-      <section class="featured-section">
-
-        <div class="section-kicker">
-          ON THE READING DESK
-          <span>01 — CURRENTLY TRANSLATING</span>
-        </div>
-
-        <div class="featured-card">
-
-          <div class="featured-meta">
-            FEATURED TRANSLATION NO. 001
-          </div>
-
-          <p class="featured-author">稚楚 / Zhichu</p>
-
-          <h2>Sternstunde.</h2>
-
-          <p>
-            A band, four unlikely members, and the kind of
-            beginning nobody quite knows what to do with.
-          </p>
-
-          <div class="featured-bottom">
-            <span>ENGLISH FAN TRANSLATION</span>
-            <span>ONGOING</span>
-            <a href="#story-sternstunde">OPEN THE FILE ↗</a>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- NOTE FROM THE TRANSLATOR -->
-
-      <section class="home-note">
-
-        <div class="section-kicker">
-          A NOTE IN THE MARGIN
-        </div>
-
-        <h2>
-          Reading it as<br>
-          we translate it.
-        </h2>
-
-        <p>
-          These are reader-made translations, worked through one
-          sentence at a time. No pretending otherwise — just the
-          story, the process, and the occasional battle with a
-          particularly stubborn line.
-        </p>
-
-        <a href="#about" class="text-link">
-          MEET THE TRANSLATOR ↗
-        </a>
-
-      </section>
-
-
-      <!-- LATEST UPDATES -->
-
-      <section class="latest-section">
-
-        <div class="section-kicker">
-          LATEST FROM THE DESK ✳
-        </div>
-
-        <div class="latest-entry">
-          <span>THE FIRST ENTRY</span>
-
-          <p>
-            Updates will appear here as new chapters and notes
-            are added.
-          </p>
-
-          <span class="latest-date">CHECK BACK WHENEVER.</span>
-        </div>
-
-        <a href="#margins" class="text-link">
-          BROWSE THE MARGINS ↗
-        </a>
-
-      </section>
-
-
-      <div class="home-ending">
-        TAKE YOUR TIME.
-        <span>THERE'S NO RUSH TO THE LAST PAGE.</span>
-      </div>
-
-    </section>
-
-
-
-    <!-- =====================================
-         THE ARCHIVE
-    ====================================== -->
-
-    <section id="archive" data-page="archive" class="page">
-
-      <div class="page-heading">
-
-        <div class="section-kicker">
-          THE COLLECTION
-          <span>CATALOGUE / 001</span>
-        </div>
-
-        <p class="eyebrow">A GROWING INDEX OF TRANSLATIONS</p>
-
-        <h1>The archive.</h1>
-
-        <p>
-          Stories found, followed, and translated one chapter
-          at a time.
-        </p>
-
-      </div>
-
-
-      <div class="archive-search-wrap">
-        <span>⌕</span>
-        <input
-          type="search"
-          id="archive-search"
-          placeholder="Search the archive..."
-          aria-label="Search the archive"
-        >
-      </div>
-
-
-      <div class="archive-count">01 ENTRY</div>
-
-
-      <article class="archive-entry">
-
-        <div class="archive-number">001</div>
-
-        <div class="archive-entry-info">
-          <h2>Sternstunde</h2>
-          <p>稚楚 · Zhichu</p>
-        </div>
-
-        <div class="archive-entry-status">
-          ONGOING
-        </div>
-
-        <a href="#story-sternstunde" aria-label="Open Sternstunde">
-          ↗
-        </a>
-
-      </article>
-
-
-      <p class="archive-footnote">
-        MORE FILES WILL BE ADDED AS THEY FIND THEIR WAY HERE.
+      <p class="welcome-description">
+        A little collection of stories translated and shared by Sivren.
       </p>
-
     </section>
 
+    <section class="featured" id="archive">
 
-
-    <!-- =====================================
-         STERNSTUNDE STORY PAGE
-    ====================================== -->
-
-    <section
-      id="story-sternstunde"
-      data-page="story-sternstunde"
-      class="page"
-    >
-
-      <a href="#archive" class="back-link">
-        ← BACK TO THE ARCHIVE
-      </a>
-
-
-      <div class="story-heading">
-
-        <div class="section-kicker">
-          FILE NO. 001
-        </div>
-
-        <p class="eyebrow">AN ENGLISH FAN TRANSLATION</p>
-
-        <h1>Sternstunde.</h1>
-
-        <p class="story-original-title">
-          稚楚 / Zhichu
-        </p>
-
-        <div class="story-tags">
-          <span>ONGOING</span>
-          <span>WEBNOVEL</span>
-          <span>TRANSLATED BY SIVREN</span>
-        </div>
-
+      <div class="section-heading">
+        <h2>Translations</h2>
+        <span>01 story</span>
       </div>
 
+      <article class="story-card">
 
-      <div class="story-tabs">
-        <a href="#story-sternstunde">ARCHIVE</a>
-        <span>ENTRY 001</span>
-        <a href="#reader">READING FILE</a>
-      </div>
-
-
-      <!-- SYNOPSIS -->
-
-      <section class="synopsis-section">
-
-        <div class="section-kicker">
-          THE BACK-COVER NOTE
+        <div class="story-cover">
+          <span>稚楚</span>
         </div>
 
-        <h2>About the story</h2>
+        <div class="story-information">
+          <p class="story-status">ONGOING</p>
 
-        <div class="synopsis-text">
+          <h3>Sternstunde</h3>
 
-          <p>
-            When they first met, Qin Yiyu saw Nan Yi standing
-            outside his front door, his expression cold and a
-            liquor bottle clutched in his hand. Naturally, he
-            assumed the guy had come to collect a debt.
+          <p class="original-title">稚楚 · Zhichu</p>
+
+          <p class="story-description">
+            English fan translation of Sternstunde.
           </p>
 
-          <p>Instead, Nan Yi said:</p>
-
-          <blockquote>
-            “I'm putting together a band. We're entering a
-            competition, and we're missing a lead vocalist
-            who can play guitar.”
-          </blockquote>
-
-          <p>
-            Qin Yiyu thought: Great. Somehow, this is even worse
-            than debt collectors.
-          </p>
-
-          <p>
-            But in the end, he agreed. After all, he couldn't
-            bear to let such a talented bassist slip through
-            his fingers.
-          </p>
-
-          <p>
-            When the competition finally arrived, nobody had
-            much faith in the newly formed band. Even the staff
-            were gossiping backstage — unfortunately for them,
-            all four band members were standing right behind them.
-          </p>
-
+          <a class="story-link" href="#story">
+            Read translation <span>↗</span>
+          </a>
         </div>
-
-        <p class="synopsis-credit">
-          Synopsis adapted for this translation project.
-        </p>
-
-      </section>
-
-
-      <!-- STORY DETAILS -->
-
-      <section class="story-details">
-
-        <div class="detail-row">
-          <span>ORIGINAL TITLE</span>
-          <span>星刻 / Sternstunde</span>
-        </div>
-
-        <div class="detail-row">
-          <span>AUTHOR</span>
-          <span>Zhichu / 稚楚</span>
-        </div>
-
-        <div class="detail-row">
-          <span>TRANSLATOR</span>
-          <span>Sivren</span>
-        </div>
-
-        <div class="detail-row">
-          <span>STATUS</span>
-          <span>Ongoing</span>
-        </div>
-
-        <div class="detail-row">
-          <span>LANGUAGE</span>
-          <span>Chinese → English</span>
-        </div>
-
-        <div class="detail-row">
-          <span>READING PROGRESS</span>
-          <span id="story-reading-progress">Not started</span>
-        </div>
-
-      </section>
-
-
-      <!-- CHAPTER INDEX -->
-
-      <section class="chapter-index">
-
-        <div class="section-kicker">
-          THE READING ORDER
-        </div>
-
-        <h2>Chapter index.</h2>
-
-        <div class="chapter-count">
-          CHAPTERS / 01
-        </div>
-
-        <div class="chapter-list">
-
-          <button class="chapter-link" data-chapter="1">
-            <span>01</span>
-            <span>Chapter 1: Turned Away at the Door</span>
-            <span>↗</span>
-          </button>
-
-        </div>
-
-        <p class="chapter-history">
-          Your reading history will be kept on this device.
-        </p>
-
-        <button
-          class="text-link"
-          data-chapter="1"
-        >
-          BEGIN READING ↗
-        </button>
-
-      </section>
-
-    </section>
-
-
-
-    <!-- =====================================
-         READER
-    ====================================== -->
-
-    <section id="reader" data-page="reader" class="page">
-
-      <a href="#story-sternstunde" class="back-link">
-        ← STORY FILE
-      </a>
-
-      <div class="reader-topline">
-        <span>MARGINALIA. / STERNSTUNDE</span>
-
-        <button id="bookmark-button" class="bookmark-button">
-          ♡ BOOKMARK
-        </button>
-      </div>
-
-
-      <div class="reader-heading">
-
-        <div class="section-kicker">
-          STERNSTUNDE / CHAPTER
-          <span id="chapter-number">01</span>
-        </div>
-
-        <h1 id="chapter-title">Chapter 1</h1>
-
-        <p>Translated by Sivren</p>
-
-      </div>
-
-
-      <!-- READER CONTROLS -->
-
-      <div class="reader-controls">
-
-        <div class="font-controls">
-          <span>TYPE</span>
-
-          <button
-            id="decrease-font"
-            aria-label="Decrease font size"
-          >
-            A−
-          </button>
-
-          <span id="font-size-value">18px</span>
-
-          <button
-            id="increase-font"
-            aria-label="Increase font size"
-          >
-            A+
-          </button>
-        </div>
-
-
-        <div class="theme-controls">
-          <button data-reading-theme="dark">
-            ◐ READING THEME
-          </button>
-
-          <button data-reading-theme="light">
-            LIGHT
-          </button>
-
-          <button data-reading-theme="sepia">
-            SEPIA
-          </button>
-        </div>
-
-      </div>
-
-
-      <!-- CHAPTER TEXT -->
-
-      <article id="chapter-content" class="chapter-content">
-
-        <p class="reader-message">
-          Opening the file…
-        </p>
-
-      </article>
-
-
-      <!-- CHAPTER NAVIGATION -->
-
-      <div class="chapter-navigation">
-
-        <button id="previous-chapter" disabled>
-          ← PREVIOUS
-        </button>
-
-        <span>01 / 01</span>
-
-        <button id="next-chapter" disabled>
-          NEXT →
-        </button>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- =====================================
-         THE MARGINS
-    ====================================== -->
-
-    <section id="margins" data-page="margins" class="page">
-
-      <div class="page-heading">
-
-        <div class="section-kicker">
-          ANNOTATIONS & OBSERVATIONS
-          <span>THE SIDE NOTES</span>
-        </div>
-
-        <p class="eyebrow">
-          A LITTLE CONTEXT, WHEN IT'S USEFUL
-        </p>
-
-        <h1>The margins.</h1>
-
-        <p>
-          The things that don't always fit neatly into the
-          chapter: translation choices, cultural context,
-          references, and notes from the process.
-        </p>
-
-      </div>
-
-
-      <div class="margins-introduction">
-
-        <span>✳</span>
-
-        <p>
-          Think of this as the space beside the page. Notes
-          will be added as the translation grows, and linked
-          to the chapters they belong to whenever possible.
-        </p>
-
-      </div>
-
-
-      <article class="margin-entry">
-
-        <div class="section-kicker">NOTE / 001</div>
-
-        <h2>Nothing in the margins. Yet.</h2>
-
-        <p>
-          Translator's notes and reading observations
-          will appear here.
-        </p>
 
       </article>
 
     </section>
 
-
-
-    <!-- =====================================
-         ABOUT
-    ====================================== -->
-
-    <section id="about" data-page="about" class="page">
-
-      <div class="section-kicker">
-        A NOTE FROM THE PERSON BEHIND THE PAGES
-        <span>THE TRANSLATOR</span>
+    <section class="about" id="about">
+      <div class="section-heading">
+        <h2>About</h2>
       </div>
 
-      <p class="eyebrow">
-        A READER WITH TOO MANY OPEN TABS
-      </p>
-
-      <div class="about-heading">
-        <h1>
-          So, who's<br>
-          Sivren?
-        </h1>
-
-        <div class="about-stamp">
-          READER<br>
-          FIRST<br>
-          ✳
-        </div>
-      </div>
-
-
-      <div class="about-copy">
-
-        <p>Hi, I'm Sivren.</p>
+      <div class="about-content">
+        <h3>Hi, I'm Sivren.</h3>
 
         <p>
-          I'm a reader with a slightly inconvenient habit:
-          getting attached to webnovels that have absolutely
-          no decent English translation.
+          I translate and read simultaneously because I can't seem to find
+          readable English translations of the stories I want to read.
         </p>
 
         <p>
-          You know how it goes. You find a story that looks
-          incredible, get excited, search for an English
-          translation, and discover that your options are
-          either machine translations, translations that are
-          barely readable, or absolutely nothing.
-        </p>
-
-        <p>
-          And sometimes, there isn't even a translation
-          to complain about.
-        </p>
-
-        <p>That's pretty much how I ended up here.</p>
-
-        <p>
-          I started translating because I wanted to read
-          these stories. Not someday, not after someone else
-          picked them up, and certainly not through a machine
-          translation that makes me question whether I've
-          understood anything correctly.
-        </p>
-
-        <p>So I'm doing it myself.</p>
-
-        <p>
-          Which means, yes, I'm translating and reading at
-          the same time. I'm figuring out the story as I go,
-          just like you will. Consider us fellow readers,
-          except one of us has a dictionary open in another
-          tab and is probably fighting with a particularly
-          stubborn sentence.
-        </p>
-
-        <p>
-          <strong>marginalia.</strong> is where I keep these
-          translations. It's a personal project, a little
-          corner for stories that deserve an English-speaking
-          audience, and hopefully a place where other readers
-          can finally enjoy the novels they've been searching for.
-        </p>
-
-        <p>
-          If you're here because you couldn't find a readable
-          translation either, well, welcome. You're in the
-          right place.
+          This is where I share those translations as I work through them.
         </p>
 
         <p class="signature">— Sivren</p>
-
       </div>
-
-
-      <div class="currently-reading">
-
-        <div class="section-kicker">
-          CURRENTLY READING / TRANSLATING
-        </div>
-
-        <p>STERNSTUNDE · 稚楚</p>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- =====================================
-         COLOPHON
-    ====================================== -->
-
-    <section id="colophon" data-page="colophon" class="page">
-
-      <div class="page-heading">
-
-        <div class="section-kicker">
-          PUBLICATION DETAILS
-          <span>COLOPHON</span>
-        </div>
-
-        <p class="eyebrow">THE SMALL PRINT</p>
-
-        <h1>Colophon.</h1>
-
-        <p>
-          A few details about this project, the people whose
-          work makes it possible, and the person maintaining
-          this little archive.
-        </p>
-
-      </div>
-
-
-      <div class="colophon-entry">
-
-        <span>01 / PROJECT</span>
-
-        <h2>marginalia.</h2>
-
-        <p>
-          An independent, non-commercial fan translation
-          archive maintained by Sivren.
-        </p>
-
-      </div>
-
-
-      <div class="colophon-entry">
-
-        <span>02 / TRANSLATIONS</span>
-
-        <h2>Credit where it's due.</h2>
-
-        <p>
-          All original stories, characters, and related
-          intellectual property belong to their respective
-          authors and rights holders. This website is an
-          unofficial fan translation project and is not
-          affiliated with the original authors or publishers.
-        </p>
-
-      </div>
-
-
-      <div class="colophon-entry">
-
-        <span>03 / TRANSLATOR</span>
-
-        <h2>Sivren</h2>
-
-        <p>
-          Translation, editing, notes, and website maintenance.
-        </p>
-
-      </div>
-
-
-      <div class="colophon-entry">
-
-        <span>04 / CONTACT & CREDITS</span>
-
-        <h2>A work in progress.</h2>
-
-        <p>
-          Additional acknowledgements, source links, and
-          contact details can be added here.
-        </p>
-
-      </div>
-
-
-      <p class="colophon-disclaimer">
-        Please support the original work and its author
-        whenever and wherever you can. If you are a rights
-        holder and have a concern about this fan project,
-        please use the contact information provided by
-        the site owner.
-      </p>
-
     </section>
 
   </main>
 
-
-
-  <!-- =====================================
-       FOOTER
-  ====================================== -->
-
-  <footer class="site-footer">
-
-    <a href="#home" class="footer-wordmark">marginalia.</a>
-
-    <p>
-      A READER-MADE ARCHIVE · BY SIVREN
-    </p>
-
-    <nav class="footer-navigation">
-      <a href="#about">ABOUT</a>
-      <a href="#colophon">COLOPHON</a>
-      <a href="#margins">NOTES</a>
-    </nav>
-
-    <span class="footer-year" id="current-year">2026</span>
-
+  <footer class="footer">
+    <a class="logo" href="#home">fanmei</a>
+    <span>© 2026 · Sivren</span>
   </footer>
-
-
-  <button
-    id="back-to-top"
-    class="back-to-top"
-    aria-label="Back to top"
-  >
-    ↑
-  </button>
 
 </body>
 </html>
