@@ -134,10 +134,11 @@ main {
 }
 
 /* STORY CARD */
+/* STORY CARD */
 
 .story-card {
   display: grid;
-  grid-template-columns: 175px 1fr;
+  grid-template-columns: 175px minmax(0, 1fr);
   gap: 35px;
   align-items: center;
   padding: 25px;
@@ -146,13 +147,11 @@ main {
 }
 
 .story-cover {
-  aspect-ratio: 3 / 4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #ded5c6;
-  color: #746957;
-  font: 45px var(--serif);
+  display: block;
+  width: 175px;
+  height: 235px;
+  object-fit: cover;
+  object-position: center;
 }
 
 .story-status {
@@ -194,7 +193,6 @@ main {
 .story-link:hover {
   color: var(--accent);
 }
-
 /* ABOUT */
 
 .about-content {
@@ -264,15 +262,16 @@ main {
     font-size: 8px;
   }
 
-  .story-card {
-    grid-template-columns: 1fr;
-    gap: 22px;
-    padding: 18px;
-  }
+ .story-card {
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 18px;
+  padding: 18px;
+}
 
-  .story-cover {
-    width: 145px;
-  }
+.story-cover {
+  width: 120px;
+  height: 170px;
+}
 
   .story-information h3 {
     font-size: 33px;
@@ -495,11 +494,4 @@ body:not(:has(.subpage:target)) #home {
   .reader-navigation {
     font-size: 10px;
   }
-}
-img.story-cover {
-  display: block;
-  width: 180px;
-  height: 240px;
-  object-fit: cover;
-  flex-shrink: 0;
 }
