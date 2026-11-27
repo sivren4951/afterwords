@@ -650,5 +650,114 @@ document.addEventListener("DOMContentLoaded", () => {
   console.info(
     "marginalia. — the archive is ready."
   );
+   
+/* FANMEI — READER */
+
+const chapterFiles = {
+  1: {
+    title: "Chapter One",
+    file: "chapters/chapter-1.txt"
+  }
+};
+
+let currentChapter = 1;
+let readerFontSize = 18;
+
+const chapterContent = document.getElementById("chapter-content");
+const chapterTitle = document.getElementById("chapter-title");
+
+async function loadChapter(number) {
+  const chapter = chapterFiles[number];
+
+  if (!chapter || !chapterContent) return;
+
+  currentChapter = number;
+  chapterTitle.textContent = chapter.title;
+  chapterContent.innerHTML = '<p class="loading-message">Loading chapter...</p>';
+
+  try {
+    const response = await fetch(chapter.file);
+
+    if (!response.ok) {
+      throw new Error("Chapter could not be loaded.");
+    }
+
+    const text = await response.text();
+
+    chapterContent.innerHTML = "";
+
+    text.split(/\n\s*\n/).forEach(paragraph => {
+      if (!paragraph.trim()) return;
+
+      const p = document.createElement("p");
+      p.textContent = paragraph.trim();
+      chapterContent.appendChild(p);
+    });
+
+  } catch (error) {
+    chapterContent.innerHTML =
+      '<p class="loading-message">Chapter unavailable. Please check the chapter file.</p>';
+  }
+}
+
+/* CHAPTER LINKS */
+
+document.querySelectorAll("[data-chapter]").forEach(link => {
+  link.addEventListener("click", () => {
+    loadChapter(Number(link.dataset.chapter));
+  });
+});
+
+/* FONT SIZE */
+
+function updateFontSize() {
+  if (!chapterContent) return;
+
+  chapterContent.style.fontSize = readerFontSize + "px";
+
+  const label = document.getElementById("font-size-value");
+  if (label) label.textContent = readerFontSize + "px";
+}
+
+document.getElementById("increase-font")?.addEventListener("click", () => {
+  readerFontSize = Math.min(26, readerFontSize + 1);
+  updateFontSize();
+});
+
+document.getElementById("decrease-font")?.addEventListener("click", () => {
+  readerFontSize = Math.max(14, readerFontSize - 1);
+  updateFontSize();
+});
+
+/* BOOKMARK */
+
+const bookmarkButton = document.getElementById("bookmark-button");
+
+function updateBookmark() {
+  const saved = localStorage.getItem("fanmei-bookmark") === String(currentChapter);
+
+  if (bookmarkButton) {
+    bookmarkButton.textContent = saved ? "★ Bookmarked" : "☆ Bookmark";
+  }
+}
+
+bookmarkButton?.addEventListener("click", () => {
+  const saved = localStorage.getItem("fanmei-bookmark");
+
+  if (saved === String(currentChapter)) {
+    localStorage.removeItem("fanmei-bookmark");
+  } else {
+    localStorage.setItem("fanmei-bookmark", currentChapter);
+  }
+
+  updateBookmark();
+});
+
+/* INITIALIZE */
+
+document.querySelectorAll("[data-chapter]").forEach(link => {
+  link.addEventListener("click", updateBookmark);
+});
+
 
 });
