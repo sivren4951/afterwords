@@ -11,18 +11,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // 01. CHAPTER SETTINGS
   // -----------------------------------------------------
 
-  const chapters = {
-    1: {
-      title: "Chapter One",
-      file: "chapters/chapter-01.txt"
-    }
+  
+const chapters = {
+  1: {
+    title: "Chapter One",
+    file: "chapters/chapter-01.txt"
+  },
 
-    // Add future chapters here:
-    // ,2: {
-    //   title: "Chapter Two",
-    //   file: "chapters/chapter-02.txt"
-    // }
-  };
+  2: {
+    title: "Chapter Two",
+    file: "chapters/chapter-02.txt"
+  }
+};
+
 
   const STORAGE = {
     bookmark: "fanmei-bookmark",
