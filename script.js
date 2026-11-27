@@ -4,26 +4,21 @@
    Main JavaScript
 ===================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   "use strict";
 
   // -----------------------------------------------------
-  // 01. CHAPTER SETTINGS
+  // 01. AUTOMATIC CHAPTER DISCOVERY
   // -----------------------------------------------------
 
-  
-const chapters = {
-  1: {
-    title: "Chapter One",
-    file: "chapters/chapter-01.txt"
-  },
+  // GitHub automatically tells fanmei which chapters exist.
+  // You only need to upload files named chapter-01.txt,
+  // chapter-02.txt, chapter-03.txt, and so on.
 
-  2: {
-    title: "Chapter Two",
-    file: "chapters/chapter-02.txt"
-  }
-};
+  const GITHUB_CHAPTERS_API =
+    "https://api.github.com/repos/sivren4951/fanmei/contents/chapters?ref=main";
 
+  const chapters = {};
 
   const STORAGE = {
     bookmark: "fanmei-bookmark",
@@ -49,11 +44,105 @@ const chapters = {
   const nextButton = $("#next-chapter");
   const bookmarkButton = $("#bookmark-button");
 
+  const chapterSection = $(".chapter-section");
+
   let currentChapter = 1;
   let chapterIsLoading = false;
 
   // -----------------------------------------------------
-  // 03. PAGE NAVIGATION
+  // 03. AUTOMATIC CHAPTER LIST
+  // -----------------------------------------------------
+
+  function renderChapterList() {
+    if (!chapterSection) return;
+
+    const headingCount = $(".section-heading span", chapterSection);
+
+    const oldRows = $$(".chapter-row", chapterSection);
+    oldRows.forEach(row => row.remove());
+
+    const chapterNumbers = Object.keys(chapters)
+      .map(Number)
+      .sort((a, b) => a - b);
+
+    if (headingCount) {
+      headingCount.textContent =
+        `${String(chapterNumbers.length).padStart(2, "0")} chapters`;
+    }
+
+    chapterNumbers.forEach(number => {
+      const link = document.createElement("a");
+
+      link.className = "chapter-row";
+      link.href = "#reader";
+      link.dataset.chapter = String(number);
+
+      const chapterNumber = document.createElement("span");
+      chapterNumber.className = "chapter-number";
+      chapterNumber.textContent = String(number).padStart(2, "0");
+
+      const chapterName = document.createElement("span");
+      chapterName.textContent = chapters[number].title;
+
+      const arrow = document.createElement("span");
+      arrow.className = "chapter-arrow";
+      arrow.textContent = "→";
+
+      link.append(chapterNumber, chapterName, arrow);
+      chapterSection.appendChild(link);
+    });
+  }
+
+  async function loadChapterList() {
+    const response = await fetch(GITHUB_CHAPTERS_API, {
+      headers: {
+        Accept: "application/vnd.github+json"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Couldn't retrieve the chapter list from GitHub.");
+    }
+
+    const files = await response.json();
+
+    const chapterFiles = files
+      .filter(file => {
+        return file.type === "file" &&
+          /^chapter-(\d+)\.txt$/i.test(file.name);
+      })
+      .map(file => {
+        const match = file.name.match(/^chapter-(\d+)\.txt$/i);
+
+        return {
+          number: Number(match[1]),
+          file: `chapters/${file.name}`
+        };
+      })
+      .sort((a, b) => a.number - b.number);
+
+    if (!chapterFiles.length) {
+      throw new Error("No chapter files were found.");
+    }
+
+    // Build the chapter list automatically.
+    chapterFiles.forEach(chapter => {
+      chapters[chapter.number] = {
+        title: `Chapter ${chapter.number}`,
+        file: chapter.file
+      };
+    });
+
+    renderChapterList();
+    updateChapterNavigation();
+
+    console.info(
+      `fanmei — found ${chapterFiles.length} chapters.`
+    );
+  }
+
+  // -----------------------------------------------------
+  // 04. PAGE NAVIGATION
   // -----------------------------------------------------
 
   function showPage(pageName) {
@@ -134,7 +223,7 @@ const chapters = {
   handleNavigation();
 
   // -----------------------------------------------------
-  // 04. CHAPTER TEXT AND CLICKABLE NOTES
+  // 05. CHAPTER TEXT AND CLICKABLE NOTES
   // -----------------------------------------------------
 
   function renderChapterText(text) {
@@ -156,7 +245,7 @@ const chapters = {
     paragraphs.forEach(paragraph => {
       const p = document.createElement("p");
 
-      // Notes use this format in the chapter text:
+      // Notes use this format:
       // [[Chinese phrase|casual explanation]]
 
       const pattern = /\[\[([^|\]]+)\|([^\]]+)\]\]/g;
@@ -175,10 +264,13 @@ const chapters = {
         note.className = "translation-note";
         note.textContent = match[1].trim();
         note.dataset.note = match[2].trim();
-        note.setAttribute("aria-label", `${match[1].trim()}: ${match[2].trim()}`);
+
+        note.setAttribute(
+          "aria-label",
+          `${match[1].trim()}: ${match[2].trim()}`
+        );
 
         p.appendChild(note);
-
         lastIndex = pattern.lastIndex;
       }
 
@@ -191,7 +283,7 @@ const chapters = {
   }
 
   // -----------------------------------------------------
-  // 05. CLICKABLE NOTE POPUPS
+  // 06. CLICKABLE NOTE POPUPS
   // -----------------------------------------------------
 
   const noteStyles = document.createElement("style");
@@ -253,7 +345,7 @@ const chapters = {
   });
 
   // -----------------------------------------------------
-  // 06. LOAD A CHAPTER
+  // 07. LOAD A CHAPTER
   // -----------------------------------------------------
 
   async function openChapter(number) {
@@ -307,7 +399,7 @@ const chapters = {
       const message = document.createElement("p");
       message.className = "loading-message";
       message.textContent =
-        "Couldn't load this chapter. Please check that chapters/chapter-01.txt exists and that its filename is correct.";
+        "Couldn't load this chapter. Please check that its file exists and has the correct filename.";
 
       readerContent.appendChild(message);
 
@@ -316,16 +408,18 @@ const chapters = {
     }
   }
 
-  // Chapter One link
-  $$("[data-chapter]").forEach(link => {
-    link.addEventListener("click", event => {
-      event.preventDefault();
-      openChapter(link.dataset.chapter);
-    });
+  // Automatically handle clicks on every generated chapter link.
+  document.addEventListener("click", event => {
+    const link = event.target.closest("[data-chapter]");
+
+    if (!link) return;
+
+    event.preventDefault();
+    openChapter(link.dataset.chapter);
   });
 
   // -----------------------------------------------------
-  // 07. PREVIOUS / NEXT
+  // 08. PREVIOUS / NEXT
   // -----------------------------------------------------
 
   function updateChapterNavigation() {
@@ -353,10 +447,8 @@ const chapters = {
     }
   }
 
-  updateChapterNavigation();
-
   // -----------------------------------------------------
-  // 08. FONT SIZE
+  // 09. FONT SIZE
   // -----------------------------------------------------
 
   let fontSize = Number(localStorage.getItem(STORAGE.fontSize)) || 18;
@@ -390,7 +482,7 @@ const chapters = {
   applyFontSize();
 
   // -----------------------------------------------------
-  // 09. BOOKMARK
+  // 10. BOOKMARK
   // -----------------------------------------------------
 
   function updateBookmark() {
@@ -425,19 +517,35 @@ const chapters = {
     updateBookmark();
   });
 
-  const savedChapter = Number(
-    localStorage.getItem(STORAGE.lastChapter)
-  );
+  // -----------------------------------------------------
+  // 11. START FANMEI
+  // -----------------------------------------------------
 
-  if (savedChapter && chapters[savedChapter]) {
-    currentChapter = savedChapter;
+  try {
+    await loadChapterList();
+
+    const savedChapter = Number(
+      localStorage.getItem(STORAGE.lastChapter)
+    );
+
+    if (savedChapter && chapters[savedChapter]) {
+      currentChapter = savedChapter;
+    }
+
+    updateBookmark();
+
+  } catch (error) {
+    console.error("fanmei chapter list error:", error);
+
+    if (chapterSection) {
+      const message = document.createElement("p");
+      message.className = "loading-message";
+      message.textContent =
+        "The chapter list couldn't load. Please refresh the page.";
+
+      chapterSection.appendChild(message);
+    }
   }
-
-  updateBookmark();
-
-  // -----------------------------------------------------
-  // 10. READY
-  // -----------------------------------------------------
 
   console.info("fanmei — reader ready.");
 });
