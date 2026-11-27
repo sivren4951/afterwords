@@ -1,8 +1,7 @@
 
 /* =====================================================
-   marginalia.
+   fanmei.
    Main JavaScript
-   A reader-made archive by Sivren
 ===================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -47,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function getStoredNumber(key, fallback) {
     const value = Number(localStorage.getItem(key));
+
     return Number.isFinite(value) && value > 0
       ? value
       : fallback;
@@ -116,7 +116,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  // All internal page links
+  // Internal page links
+
   $$('a[href^="#"]').forEach(link => {
     link.addEventListener("click", event => {
       const destination = link.getAttribute("href");
@@ -171,7 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  // Close menu when clicking elsewhere
   document.addEventListener("click", event => {
     if (
       navigation &&
@@ -189,7 +189,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // -----------------------------------------------------
 
   const archiveSearch = $("#archive-search");
-
   const archiveEntries = $$(".archive-entry");
 
   if (archiveSearch) {
@@ -217,7 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const previousButton = $("#previous-chapter");
   const nextButton = $("#next-chapter");
-
   const bookmarkButton = $("#bookmark-button");
 
   let currentChapter = 1;
@@ -231,58 +229,67 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  // Render paragraphs and clickable translation notes
+
   function renderChapterText(text) {
-   
-function renderChapterText(text) {
-  if (!readerContent) return;
+    if (!readerContent) return;
 
-  readerContent.replaceChildren();
+    readerContent.replaceChildren();
 
-  const paragraphs = text
-    .replace(/\r\n/g, "\n")
-    .trim()
-    .split(/\n\s*\n/)
-    .filter(paragraph => paragraph.trim().length > 0);
+    const paragraphs = text
+      .replace(/\r\n/g, "\n")
+      .trim()
+      .split(/\n\s*\n/)
+      .filter(paragraph => paragraph.trim().length > 0);
 
-  const notePattern = /\[\[([\s\S]*?)\|([\s\S]*?)\]\]/g;
+    const notePattern = /\[\[([\s\S]*?)\|([\s\S]*?)\]\]/g;
 
-  paragraphs.forEach(paragraph => {
-    const element = document.createElement("p");
-    let lastIndex = 0;
-    let match;
-
-    while ((match = notePattern.exec(paragraph)) !== null) {
-      element.appendChild(
-        document.createTextNode(paragraph.slice(lastIndex, match.index))
-      );
-
-      const note = document.createElement("span");
-      note.className = "translation-note";
-      note.textContent = match[1];
-
-      const popup = document.createElement("span");
-      popup.className = "note-popup";
-      popup.textContent = match[2];
-
-      note.appendChild(popup);
-      element.appendChild(note);
-
-      lastIndex = notePattern.lastIndex;
+    if (paragraphs.length === 0) {
+      const emptyMessage = document.createElement("p");
+      emptyMessage.textContent = "This chapter is empty.";
+      readerContent.appendChild(emptyMessage);
+      return;
     }
-
-    element.appendChild(
-      document.createTextNode(paragraph.slice(lastIndex))
-    );
-
-    readerContent.appendChild(element);
-  });
-}
-
 
     paragraphs.forEach(paragraph => {
       const element = document.createElement("p");
 
-      element.textContent = paragraph.trim();
+      let lastIndex = 0;
+      let match;
+
+      while ((match = notePattern.exec(paragraph)) !== null) {
+
+        // Add the text before the note
+
+        element.appendChild(
+          document.createTextNode(
+            paragraph.slice(lastIndex, match.index)
+          )
+        );
+
+        // Create the clickable phrase
+
+        const note = document.createElement("span");
+        note.className = "translation-note";
+        note.textContent = match[1];
+
+        // Create its explanation
+
+        const popup = document.createElement("span");
+        popup.className = "note-popup";
+        popup.textContent = match[2];
+
+        note.appendChild(popup);
+        element.appendChild(note);
+
+        lastIndex = notePattern.lastIndex;
+      }
+
+      // Add the remaining paragraph text
+
+      element.appendChild(
+        document.createTextNode(paragraph.slice(lastIndex))
+      );
 
       readerContent.appendChild(element);
     });
@@ -332,7 +339,6 @@ function renderChapterText(text) {
 
       const text = await response.text();
 
-      // Prevent an outdated request from changing the reader
       if (currentChapter !== number) return;
 
       renderChapterText(text);
@@ -359,7 +365,7 @@ function renderChapterText(text) {
       updateReadingProgress();
 
     } catch (error) {
-      console.error("marginalia. chapter error:", error);
+      console.error("fanmei. chapter error:", error);
 
       readerContent.replaceChildren();
 
@@ -378,6 +384,7 @@ function renderChapterText(text) {
 
 
   // Chapter index buttons
+
   $$("[data-chapter]").forEach(button => {
     button.addEventListener("click", () => {
       openChapter(button.dataset.chapter);
@@ -663,8 +670,6 @@ function renderChapterText(text) {
   );
 
   if (savedChapter && chapters[savedChapter]) {
-    // Keep the saved chapter available without
-    // automatically opening it when the site loads.
     currentChapter = savedChapter;
     updateBookmark();
     updateChapterNavigation();
@@ -672,65 +677,69 @@ function renderChapterText(text) {
 
 
   // -----------------------------------------------------
-  // 16. READY
+  // 16. CLICKABLE TRANSLATION NOTES
   // -----------------------------------------------------
 
-  console.info(
-    "marginalia. — the archive is ready."
-  );
-   
-/* FANMEI — READER */
+  const noteStyle = document.createElement("style");
+
+  noteStyle.textContent = `
+    .translation-note {
+      position: relative;
+      display: inline-block;
+      color: #927e69;
+      border-bottom: 1px dotted #927e69;
+      cursor: pointer;
+    }
+
+    .note-popup {
+      display: none;
+      position: absolute;
+      left: 0;
+      bottom: 1.8em;
+      width: 230px;
+      max-width: 75vw;
+      padding: 12px 14px;
+      background: #f5f0e7;
+      color: #49443e;
+      border: 1px solid #ded5c8;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.6;
+      font-weight: normal;
+      z-index: 100;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+
+    .translation-note.active .note-popup {
+      display: block;
+    }
+  `;
+
+  document.head.appendChild(noteStyle);
 
 
-});
+  // Open and close notes when clicked
 
-/* FANMEI — CLICKABLE TRANSLATION NOTES */
+  document.addEventListener("click", event => {
+    const note = event.target.closest(".translation-note");
 
-const noteStyle = document.createElement("style");
+    document.querySelectorAll(".translation-note.active").forEach(item => {
+      if (item !== note) {
+        item.classList.remove("active");
+      }
+    });
 
-noteStyle.textContent = `
-.translation-note {
-  position: relative;
-  color: #927e69;
-  border-bottom: 1px dotted #927e69;
-  cursor: pointer;
-}
-
-.note-popup {
-  display: none;
-  position: absolute;
-  left: 0;
-  bottom: 1.8em;
-  width: 230px;
-  padding: 12px 14px;
-  background: #f5f0e7;
-  color: #49443e;
-  border: 1px solid #ded5c8;
-  border-radius: 6px;
-  font-size: 13px;
-  line-height: 1.6;
-  font-weight: normal;
-  z-index: 100;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-}
-
-.translation-note.active .note-popup {
-  display: block;
-}
-`;
-
-document.head.appendChild(noteStyle);
-
-document.addEventListener("click", event => {
-  const note = event.target.closest(".translation-note");
-
-  document.querySelectorAll(".translation-note.active").forEach(item => {
-    if (item !== note) item.classList.remove("active");
+    if (note) {
+      note.classList.toggle("active");
+      event.stopPropagation();
+    }
   });
 
-  if (note) {
-    note.classList.toggle("active");
-    event.stopPropagation();
-  }
-});
 
+  // -----------------------------------------------------
+  // 17. READY
+  // -----------------------------------------------------
+
+  console.info("fanmei. — the archive is ready.");
+
+});
