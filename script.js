@@ -232,24 +232,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   function renderChapterText(text) {
-    if (!readerContent) return;
+   
+function renderChapterText(text) {
+  if (!readerContent) return;
 
-    readerContent.replaceChildren();
+  readerContent.replaceChildren();
 
-    const paragraphs = text
-      .replace(/\r\n/g, "\n")
-      .trim()
-      .split(/\n\s*\n/)
-      .filter(paragraph => paragraph.trim().length > 0);
+  const paragraphs = text
+    .replace(/\r\n/g, "\n")
+    .trim()
+    .split(/\n\s*\n/)
+    .filter(paragraph => paragraph.trim().length > 0);
 
-    if (paragraphs.length === 0) {
-      const emptyMessage = document.createElement("p");
+  const notePattern = /\[\[([\s\S]*?)\|([\s\S]*?)\]\]/g;
 
-      emptyMessage.textContent = "This chapter is empty.";
-      readerContent.appendChild(emptyMessage);
+  paragraphs.forEach(paragraph => {
+    const element = document.createElement("p");
+    let lastIndex = 0;
+    let match;
 
-      return;
+    while ((match = notePattern.exec(paragraph)) !== null) {
+      element.appendChild(
+        document.createTextNode(paragraph.slice(lastIndex, match.index))
+      );
+
+      const note = document.createElement("span");
+      note.className = "translation-note";
+      note.textContent = match[1];
+
+      const popup = document.createElement("span");
+      popup.className = "note-popup";
+      popup.textContent = match[2];
+
+      note.appendChild(popup);
+      element.appendChild(note);
+
+      lastIndex = notePattern.lastIndex;
     }
+
+    element.appendChild(
+      document.createTextNode(paragraph.slice(lastIndex))
+    );
+
+    readerContent.appendChild(element);
+  });
+}
+
 
     paragraphs.forEach(paragraph => {
       const element = document.createElement("p");
@@ -653,115 +681,47 @@ document.addEventListener("DOMContentLoaded", () => {
    
 /* FANMEI — READER */
 
-const chapterFiles = {
-  1: {
-    title: "Chapter One",
-    file: "chapters/chapter-1.txt"
-  }
-};
 
-let currentChapter = 1;
-let readerFontSize = 18;
+});
 
-const chapterContent = document.getElementById("chapter-content");
-const chapterTitle = document.getElementById("chapter-title");
+/* FANMEI — CLICKABLE TRANSLATION NOTES */
 
-async function loadChapter(number) {
-  const chapter = chapterFiles[number];
+const noteStyle = document.createElement("style");
 
-  if (!chapter || !chapterContent) return;
-
-  currentChapter = number;
-  chapterTitle.textContent = chapter.title;
-  chapterContent.innerHTML = '<p class="loading-message">Loading chapter...</p>';
-
-  try {
-    const response = await fetch(chapter.file);
-
-    if (!response.ok) {
-      throw new Error("Chapter could not be loaded.");
-    }
-
-    const text = await response.text();
-
-    chapterContent.innerHTML = "";
-
-    text.split(/\n\s*\n/).forEach(paragraph => {
-      if (!paragraph.trim()) return;
-
-      const p = document.createElement("p");
-      p.textContent = paragraph.trim();
-      chapterContent.appendChild(p);
-    });
-
-  } catch (error) {
-    chapterContent.innerHTML =
-      '<p class="loading-message">Chapter unavailable. Please check the chapter file.</p>';
-  }
+noteStyle.textContent = `
+.translation-note {
+  position: relative;
+  color: #927e69;
+  border-bottom: 1px dotted #927e69;
+  cursor: pointer;
 }
 
-/* CHAPTER LINKS */
-
-document.querySelectorAll("[data-chapter]").forEach(link => {
-  link.addEventListener("click", () => {
-    loadChapter(Number(link.dataset.chapter));
-  });
-});
-
-/* FONT SIZE */
-
-function updateFontSize() {
-  if (!chapterContent) return;
-
-  chapterContent.style.fontSize = readerFontSize + "px";
-
-  const label = document.getElementById("font-size-value");
-  if (label) label.textContent = readerFontSize + "px";
+.note-popup {
+  display: none;
+  position: absolute;
+  left: 0;
+  bottom: 1.8em;
+  width: 230px;
+  padding: 12px 14px;
+  background: #f5f0e7;
+  color: #49443e;
+  border: 1px solid #ded5c8;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+  font-weight: normal;
+  z-index: 100;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
 }
 
-document.getElementById("increase-font")?.addEventListener("click", () => {
-  readerFontSize = Math.min(26, readerFontSize + 1);
-  updateFontSize();
-});
-
-document.getElementById("decrease-font")?.addEventListener("click", () => {
-  readerFontSize = Math.max(14, readerFontSize - 1);
-  updateFontSize();
-});
-
-/* BOOKMARK */
-
-const bookmarkButton = document.getElementById("bookmark-button");
-
-function updateBookmark() {
-  const saved = localStorage.getItem("fanmei-bookmark") === String(currentChapter);
-
-  if (bookmarkButton) {
-    bookmarkButton.textContent = saved ? "★ Bookmarked" : "☆ Bookmark";
-  }
+.translation-note.active .note-popup {
+  display: block;
 }
+`;
 
-bookmarkButton?.addEventListener("click", () => {
-  const saved = localStorage.getItem("fanmei-bookmark");
+document.head.appendChild(noteStyle);
 
-  if (saved === String(currentChapter)) {
-    localStorage.removeItem("fanmei-bookmark");
-  } else {
-    localStorage.setItem("fanmei-bookmark", currentChapter);
-  }
-
-  updateBookmark();
-});
-
-/* INITIALIZE */
-
-document.querySelectorAll("[data-chapter]").forEach(link => {
-  link.addEventListener("click", updateBookmark);
-});
-
-
-});
-document.addEventListener("click", function(event) {
+document.addEventListener("click", event => {
   const note = event.target.closest(".translation-note");
 
   document.querySelectorAll(".translation-note.active").forEach(item => {
@@ -773,3 +733,4 @@ document.addEventListener("click", function(event) {
     event.stopPropagation();
   }
 });
+
