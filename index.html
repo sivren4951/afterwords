@@ -28,82 +28,168 @@
     </nav>
   </header>
 
-  <main id="home">
+  <main>
 
-    <section class="welcome">
-      <p class="welcome-label">CHINESE DANMEI · ENGLISH FAN TRANSLATIONS</p>
+    <!-- HOME PAGE -->
+    <section class="page" id="home" data-page="home">
 
-      <h1>Welcome to <em>fanmei.</em></h1>
+      <section class="welcome">
+        <p class="welcome-label">CHINESE DANMEI · ENGLISH FAN TRANSLATIONS</p>
 
-      <p class="welcome-description">
-        A little collection of stories translated and shared by Sivren.
+        <h1>Welcome to <em>fanmei.</em></h1>
+
+        <p class="welcome-description">
+          A little collection of stories translated and shared by Sivren.
+        </p>
+      </section>
+
+      <section class="featured" id="archive">
+
+        <div class="section-heading">
+          <h2>Translations</h2>
+          <span>01 story</span>
+        </div>
+
+        <article class="story-card" style="
+          display: grid;
+          grid-template-columns: 175px minmax(0, 1fr);
+          gap: 35px;
+          align-items: center;
+          padding: 25px;
+          background: var(--surface);
+          border: 1px solid var(--border);
+        ">
+
+          <img
+            src="images/sternstunde-cover.jpg"
+            alt="Sternstunde cover"
+            style="
+              display: block;
+              width: 175px;
+              height: 235px;
+              object-fit: cover;
+              max-width: 100%;
+            "
+          >
+
+          <div class="story-information">
+            <p class="story-status">ONGOING</p>
+            <h3>Sternstunde</h3>
+            <p class="original-title">稚楚 · Zhichu</p>
+            <p class="story-description">
+              English fan translation of Sternstunde.
+            </p>
+            <a class="story-link" href="#story">
+              Read translation <span>↗</span>
+            </a>
+          </div>
+
+        </article>
+      </section>
+
+      <section class="about" id="about">
+        <div class="section-heading">
+          <h2>About</h2>
+        </div>
+
+        <div class="about-content">
+          <h3>Hi, I'm Sivren.</h3>
+
+          <p>
+            I translate and read simultaneously because I can't seem to find
+            readable English translations of the stories I want to read.
+          </p>
+
+          <p>
+            This is where I share those translations as I work through them.
+          </p>
+
+          <p class="signature">— Sivren</p>
+        </div>
+      </section>
+
+    </section>
+
+
+    <!-- STORY PAGE -->
+    <section class="subpage page" id="story" data-page="story" hidden>
+
+      <a class="back-link" href="#home">← Back to home</a>
+
+      <div class="story-header">
+        <p class="small-label">TRANSLATION · SIVREN</p>
+        <h1>Sternstunde</h1>
+        <p class="original-title">稚楚 · Zhichu</p>
+        <span class="status">Ongoing translation</span>
+      </div>
+
+      <div class="story-description">
+        <h2>About the story</h2>
+        <p>
+          An unofficial English fan translation of Sternstunde by Zhichu.
+          This translation is a personal, ongoing project.
+        </p>
+      </div>
+
+      <div class="chapter-section">
+        <div class="section-heading">
+          <h2>Chapters</h2>
+          <span>01 chapter</span>
+        </div>
+
+        <a class="chapter-row" href="#reader" data-chapter="1">
+          <span class="chapter-number">01</span>
+          <span>Chapter One</span>
+          <span class="chapter-arrow">→</span>
+        </a>
+      </div>
+
+      <p class="translation-note">
+        Fan translation · All rights belong to the original author.
       </p>
-    </section>
-
-    <section class="featured" id="archive">
-
-      <div class="section-heading">
-        <h2>Translations</h2>
-        <span>01 story</span>
-      </div>
-
-<article class="story-card" style="
-  display: grid;
-  grid-template-columns: 175px minmax(0, 1fr);
-  gap: 35px;
-  align-items: center;
-  padding: 25px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-">
-
-  <img
-    src="images/sternstunde-cover.jpg"
-    alt="Sternstunde cover"
-    style="
-      display: block;
-      width: 175px;
-      height: 235px;
-      object-fit: cover;
-      max-width: 100%;
-    "
-  >
-
-  <div class="story-information">
-    <p class="story-status">ONGOING</p>
-    <h3>Sternstunde</h3>
-    <p class="original-title">稚楚 · Zhichu</p>
-    <p class="story-description">
-      English fan translation of Sternstunde.
-    </p>
-    <a class="story-link" href="#story">
-      Read translation <span>↗</span>
-    </a>
-  </div>
-
-</article>
 
     </section>
 
-    <section class="about" id="about">
-      <div class="section-heading">
-        <h2>About</h2>
+
+    <!-- READER PAGE -->
+    <section class="subpage page" id="reader" data-page="reader" hidden>
+
+      <a class="back-link" href="#story">← Back to Sternstunde</a>
+
+      <header class="reader-heading">
+        <p class="small-label">STERNSTUNDE · 稚楚</p>
+        <h1 id="chapter-title">Chapter One</h1>
+        <p>English fan translation by Sivren</p>
+      </header>
+
+      <div class="reader-toolbar">
+        <div class="font-controls">
+          <button id="decrease-font" type="button">A−</button>
+          <span id="font-size-value">18px</span>
+          <button id="increase-font" type="button">A+</button>
+        </div>
+
+        <button id="bookmark-button" type="button">
+          ☆ Bookmark
+        </button>
       </div>
 
-      <div class="about-content">
-        <h3>Hi, I'm Sivren.</h3>
+      <article class="chapter-content" id="chapter-content">
+        <p class="loading-message">Loading chapter...</p>
+      </article>
 
-        <p>
-          I translate and read simultaneously because I can't seem to find
-          readable English translations of the stories I want to read.
-        </p>
+      <div class="reader-navigation">
+        <button id="previous-chapter" type="button" disabled>
+          ← Previous
+        </button>
 
-        <p>
-          This is where I share those translations as I work through them.
-        </p>
+        <a href="#story">Chapter list</a>
 
-        <p class="signature">— Sivren</p>
+        <button id="next-chapter" type="button" disabled>
+          Next →
+        </button>
       </div>
+
     </section>
 
   </main>
@@ -113,88 +199,7 @@
     <span>© 2026 · Sivren</span>
   </footer>
 
+  <script src="script.js" defer></script>
+
 </body>
 </html>
-
-<!-- STORY PAGE -->
-
-<section class="subpage" id="story">
-
-  <a class="back-link" href="#home">← Back to home</a>
-
-  <div class="story-header">
-    <p class="small-label">TRANSLATION · SIVREN</p>
-    <h1>Sternstunde</h1>
-    <p class="original-title">稚楚 · Zhichu</p>
-    <span class="status">Ongoing translation</span>
-  </div>
-
-  <div class="story-description">
-    <h2>About the story</h2>
-    <p>
-      An unofficial English fan translation of Sternstunde by Zhichu.
-      This translation is a personal, ongoing project.
-    </p>
-  </div>
-
-  <div class="chapter-section">
-    <div class="section-heading">
-      <h2>Chapters</h2>
-      <span>01 chapter</span>
-    </div>
-
-    <a class="chapter-row" href="#reader" data-chapter="1">
-      <span class="chapter-number">01</span>
-      <span>Chapter One</span>
-      <span class="chapter-arrow">→</span>
-    </a>
-  </div>
-
-  <p class="translation-note">
-    Fan translation · All rights belong to the original author.
-  </p>
-
-</section>
-
-
-<!-- READER PAGE -->
-
-<section class="subpage" id="reader">
-
-  <a class="back-link" href="#story">← Back to Sternstunde</a>
-
-  <header class="reader-heading">
-    <p class="small-label">STERNSTUNDE · 稚楚</p>
-    <h1 id="chapter-title">Chapter One</h1>
-    <p>English fan translation by Sivren</p>
-  </header>
-
-  <div class="reader-toolbar">
-    <div class="font-controls">
-      <button id="decrease-font" type="button">A−</button>
-      <span id="font-size-value">18px</span>
-      <button id="increase-font" type="button">A+</button>
-    </div>
-
-    <button id="bookmark-button" type="button">
-      ☆ Bookmark
-    </button>
-  </div>
-
-  <article class="chapter-content" id="chapter-content">
-    <p class="loading-message">Loading chapter...</p>
-  </article>
-
-  <div class="reader-navigation">
-    <button id="previous-chapter" type="button" disabled>
-      ← Previous
-    </button>
-
-    <a href="#story">Chapter list</a>
-
-    <button id="next-chapter" type="button" disabled>
-      Next →
-    </button>
-  </div>
-
-</section>
