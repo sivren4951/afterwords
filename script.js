@@ -5,9 +5,7 @@
 ===================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-
   "use strict";
-
 
   // -----------------------------------------------------
   // 01. CONFIGURATION
@@ -34,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
     progress: "marginalia-reading-progress"
   };
 
-
   // -----------------------------------------------------
   // 02. HELPERS
   // -----------------------------------------------------
@@ -53,13 +50,101 @@ document.addEventListener("DOMContentLoaded", () => {
       : fallback;
   }
 
-
   // -----------------------------------------------------
-  // 03. PAGE NAVIGATION
+  // 03. ELEMENTS
   // -----------------------------------------------------
 
   const pages = $$(".page[data-page]");
   const navLinks = $$("[data-nav]");
+
+  const menuButton = $("#menu-toggle");
+  const navigation = $("#site-navigation");
+
+  const readerContent = $("#chapter-content");
+  const chapterTitle = $("#chapter-title");
+  const chapterNumber = $("#chapter-number");
+
+  const previousButton = $("#previous-chapter");
+  const nextButton = $("#next-chapter");
+  const bookmarkButton = $("#bookmark-button");
+
+  const progressBar = $("#reading-progress");
+
+  let currentChapter = 1;
+  let chapterIsLoading = false;
+
+  // -----------------------------------------------------
+  // 04. MOBILE NAVIGATION
+  // -----------------------------------------------------
+
+  function closeMenu() {
+    if (!menuButton || !navigation) return;
+
+    navigation.classList.remove("open");
+    menuButton.classList.remove("open");
+
+    menuButton.setAttribute("aria-expanded", "false");
+  }
+
+  if (menuButton && navigation) {
+    menuButton.setAttribute("aria-expanded", "false");
+
+    menuButton.addEventListener("click", () => {
+      const isOpen = navigation.classList.toggle("open");
+
+      menuButton.classList.toggle("open", isOpen);
+      menuButton.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    navigation.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", closeMenu);
+    });
+  }
+
+  document.addEventListener("click", event => {
+    if (
+      navigation &&
+      menuButton &&
+      !navigation.contains(event.target) &&
+      !menuButton.contains(event.target)
+    ) {
+      closeMenu();
+    }
+  });
+
+  // -----------------------------------------------------
+  // 05. READING PROGRESS
+  // -----------------------------------------------------
+
+  function updateReadingProgress() {
+    if (!progressBar) return;
+
+    const totalHeight =
+      document.documentElement.scrollHeight -
+      window.innerHeight;
+
+    const progress = totalHeight > 0
+      ? (window.scrollY / totalHeight) * 100
+      : 0;
+
+    progressBar.style.width =
+      `${Math.min(100, Math.max(0, progress))}%`;
+  }
+
+  window.addEventListener(
+    "scroll",
+    updateReadingProgress,
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "resize",
+    updateReadingProgress
+  );
+
+  // -----------------------------------------------------
+  // 06. PAGE NAVIGATION
+  // -----------------------------------------------------
 
   function showPage(pageName) {
     const pageExists = pages.some(
@@ -101,12 +186,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-
   function navigateToHash() {
     const pageName = location.hash.slice(1) || "home";
     showPage(pageName);
   }
-
 
   function navigateTo(pageName) {
     if (location.hash === `#${pageName}`) {
@@ -115,9 +198,6 @@ document.addEventListener("DOMContentLoaded", () => {
       location.hash = pageName;
     }
   }
-
-
-  // Internal page links
 
   $$('a[href^="#"]').forEach(link => {
     link.addEventListener("click", event => {
@@ -134,59 +214,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-
-  window.addEventListener("hashchange", navigateToHash);
-
-  navigateToHash();
-
-
   // -----------------------------------------------------
-  // 04. MOBILE NAVIGATION
-  // -----------------------------------------------------
-
-  const menuButton = $("#menu-toggle");
-  const navigation = $("#site-navigation");
-
-  function closeMenu() {
-    if (!menuButton || !navigation) return;
-
-    navigation.classList.remove("open");
-    menuButton.classList.remove("open");
-
-    menuButton.setAttribute("aria-expanded", "false");
-  }
-
-
-  if (menuButton && navigation) {
-    menuButton.setAttribute("aria-expanded", "false");
-
-    menuButton.addEventListener("click", () => {
-      const isOpen = navigation.classList.toggle("open");
-
-      menuButton.classList.toggle("open", isOpen);
-      menuButton.setAttribute("aria-expanded", String(isOpen));
-    });
-
-    navigation.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", closeMenu);
-    });
-  }
-
-
-  document.addEventListener("click", event => {
-    if (
-      navigation &&
-      menuButton &&
-      !navigation.contains(event.target) &&
-      !menuButton.contains(event.target)
-    ) {
-      closeMenu();
-    }
-  });
-
-
-  // -----------------------------------------------------
-  // 05. ARCHIVE SEARCH
+  // 07. ARCHIVE SEARCH
   // -----------------------------------------------------
 
   const archiveSearch = $("#archive-search");
@@ -194,34 +223,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (archiveSearch) {
     archiveSearch.addEventListener("input", () => {
-      const query = archiveSearch.value
-        .toLowerCase()
-        .trim();
+      const query = archiveSearch.value.toLowerCase().trim();
 
       archiveEntries.forEach(entry => {
-        const searchableText = entry.textContent.toLowerCase();
-
-        entry.hidden = !searchableText.includes(query);
+        entry.hidden = !entry.textContent
+          .toLowerCase()
+          .includes(query);
       });
     });
   }
 
-
   // -----------------------------------------------------
-  // 06. CHAPTER READER
+  // 08. CHAPTER LIST
   // -----------------------------------------------------
-
-  const readerContent = $("#chapter-content");
-  const chapterTitle = $("#chapter-title");
-  const chapterNumber = $("#chapter-number");
-
-  const previousButton = $("#previous-chapter");
-  const nextButton = $("#next-chapter");
-  const bookmarkButton = $("#bookmark-button");
-
-  let currentChapter = 1;
-  let chapterIsLoading = false;
-
 
   function getAvailableChapters() {
     return Object.keys(chapters)
@@ -229,8 +243,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .sort((a, b) => a - b);
   }
 
-
-  // Render paragraphs and clickable translation notes
+  // -----------------------------------------------------
+  // 09. CLICKABLE TRANSLATION NOTES
+  // -----------------------------------------------------
 
   function renderChapterText(text) {
     if (!readerContent) return;
@@ -252,16 +267,11 @@ document.addEventListener("DOMContentLoaded", () => {
       let match;
 
       while ((match = pattern.exec(paragraph)) !== null) {
-
-        // Add the text before the note
-
         element.appendChild(
           document.createTextNode(
             paragraph.slice(lastIndex, match.index)
           )
         );
-
-        // Create the clickable phrase
 
         const note = document.createElement("button");
 
@@ -274,12 +284,17 @@ document.addEventListener("DOMContentLoaded", () => {
           `${match[1]} — click to read an explanation`
         );
 
+        const popup = document.createElement("span");
+
+        popup.className = "note-popup";
+        popup.textContent = match[2];
+        popup.setAttribute("role", "tooltip");
+
+        note.appendChild(popup);
         element.appendChild(note);
 
         lastIndex = pattern.lastIndex;
       }
-
-      // Add the remaining paragraph text
 
       element.appendChild(
         document.createTextNode(
@@ -291,8 +306,187 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Note appearance
 
-  // Load a chapter from its text file
+  const noteStyle = document.createElement("style");
+
+  noteStyle.textContent = `
+    .translation-note {
+      position: relative;
+      display: inline;
+      padding: 0;
+      margin: 0;
+      border: 0;
+      border-bottom: 1px dotted #927e69;
+      background: transparent;
+      color: #927e69;
+      font: inherit;
+      cursor: pointer;
+      text-align: inherit;
+    }
+
+    .translation-note:hover {
+      color: #665747;
+      border-bottom-style: solid;
+    }
+
+    .note-popup {
+      display: none;
+      position: absolute;
+      left: 0;
+      bottom: calc(100% + 10px);
+      width: 250px;
+      max-width: 75vw;
+      padding: 12px 15px;
+      background: #f5f0e7;
+      color: #49443e;
+      border: 1px solid #ded5c8;
+      border-radius: 5px;
+      font-family: sans-serif;
+      font-size: 13px;
+      font-weight: normal;
+      line-height: 1.6;
+      text-align: left;
+      white-space: normal;
+      z-index: 1000;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+
+    .translation-note.active .note-popup {
+      display: block;
+    }
+  `;
+
+  document.head.appendChild(noteStyle);
+
+  // Open and close notes
+
+  document.addEventListener("click", event => {
+    if (!(event.target instanceof Element)) return;
+
+    const note = event.target.closest(".translation-note");
+
+    document.querySelectorAll(".translation-note.active").forEach(item => {
+      if (item !== note) {
+        item.classList.remove("active");
+      }
+    });
+
+    if (note) {
+      note.classList.toggle("active");
+      event.stopPropagation();
+    }
+  });
+
+  // -----------------------------------------------------
+  // 10. STORY READING HISTORY
+  // -----------------------------------------------------
+
+  function updateStoryProgress() {
+    const progressLabel = $("#story-reading-progress");
+
+    if (!progressLabel) return;
+
+    const lastChapter = Number(
+      localStorage.getItem(STORAGE.lastChapter)
+    );
+
+    if (!lastChapter) {
+      progressLabel.textContent = "Not started";
+      return;
+    }
+
+    const total = getAvailableChapters().length;
+
+    progressLabel.textContent =
+      `Last opened: Chapter ${lastChapter} / ${total}`;
+  }
+
+  // -----------------------------------------------------
+  // 11. BOOKMARKS
+  // -----------------------------------------------------
+
+  function updateBookmark() {
+    if (!bookmarkButton) return;
+
+    const savedChapter = Number(
+      localStorage.getItem(STORAGE.bookmark)
+    );
+
+    const isBookmarked = savedChapter === currentChapter;
+
+    bookmarkButton.textContent = isBookmarked
+      ? "♥ BOOKMARKED"
+      : "♡ BOOKMARK";
+
+    bookmarkButton.classList.toggle(
+      "bookmarked",
+      isBookmarked
+    );
+
+    bookmarkButton.setAttribute(
+      "aria-pressed",
+      String(isBookmarked)
+    );
+  }
+
+  if (bookmarkButton) {
+    bookmarkButton.addEventListener("click", () => {
+      const savedChapter = Number(
+        localStorage.getItem(STORAGE.bookmark)
+      );
+
+      if (savedChapter === currentChapter) {
+        localStorage.removeItem(STORAGE.bookmark);
+      } else {
+        localStorage.setItem(
+          STORAGE.bookmark,
+          String(currentChapter)
+        );
+      }
+
+      updateBookmark();
+    });
+  }
+
+  // -----------------------------------------------------
+  // 12. PREVIOUS / NEXT CHAPTER
+  // -----------------------------------------------------
+
+  function updateChapterNavigation() {
+    const available = getAvailableChapters();
+    const currentIndex = available.indexOf(currentChapter);
+
+    const previous = available[currentIndex - 1];
+    const next = available[currentIndex + 1];
+
+    if (previousButton) {
+      previousButton.disabled = !previous;
+
+      previousButton.onclick = () => {
+        if (previous) openChapter(previous);
+      };
+    }
+
+    if (nextButton) {
+      nextButton.disabled = !next;
+
+      nextButton.onclick = () => {
+        if (next) openChapter(next);
+      };
+    }
+
+    const navigationLabel = $(".chapter-navigation span");
+
+    if (navigationLabel) {
+      navigationLabel.textContent =
+        `${String(currentChapter).padStart(2, "0")} / ${String(available.length).padStart(2, "0")}`;
+    }
+  }
+
+  // -----------------------------------------------------
+  // 13. LOAD CHAPTER
+  // -----------------------------------------------------
 
   async function openChapter(number) {
     number = Number(number);
@@ -306,12 +500,12 @@ document.addEventListener("DOMContentLoaded", () => {
     chapterIsLoading = true;
     currentChapter = number;
 
-    readerContent.innerHTML = "";
+    readerContent.replaceChildren();
 
     const loadingMessage = document.createElement("p");
 
     loadingMessage.className = "reader-message";
-    loadingMessage.textContent = "Opening the file…";
+    loadingMessage.textContent = "Opening the chapter…";
 
     readerContent.appendChild(loadingMessage);
 
@@ -370,9 +564,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const errorMessage = document.createElement("p");
 
       errorMessage.className = "reader-message";
-
       errorMessage.textContent =
-        "The chapter couldn't be opened. Please check that the chapter file exists in your chapters folder and that you're viewing the website through GitHub Pages.";
+        "The chapter couldn't be opened. Check that chapters/chapter-01.txt exists and that its filename matches the JavaScript.";
 
       readerContent.appendChild(errorMessage);
 
@@ -380,7 +573,6 @@ document.addEventListener("DOMContentLoaded", () => {
       chapterIsLoading = false;
     }
   }
-
 
   // Chapter index buttons
 
@@ -390,49 +582,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-
   // -----------------------------------------------------
-  // 07. PREVIOUS / NEXT CHAPTER
-  // -----------------------------------------------------
-
-  function updateChapterNavigation() {
-    const available = getAvailableChapters();
-
-    const currentIndex = available.indexOf(currentChapter);
-
-    const previous = available[currentIndex - 1];
-    const next = available[currentIndex + 1];
-
-    if (previousButton) {
-      previousButton.disabled = !previous;
-
-      previousButton.onclick = () => {
-        if (previous) openChapter(previous);
-      };
-    }
-
-    if (nextButton) {
-      nextButton.disabled = !next;
-
-      nextButton.onclick = () => {
-        if (next) openChapter(next);
-      };
-    }
-
-    const navigationLabel = $(".chapter-navigation span");
-
-    if (navigationLabel) {
-      navigationLabel.textContent =
-        `${String(currentChapter).padStart(2, "0")} / ${String(available.length).padStart(2, "0")}`;
-    }
-  }
-
-
-  updateChapterNavigation();
-
-
-  // -----------------------------------------------------
-  // 08. FONT SIZE
+  // 14. FONT SIZE
   // -----------------------------------------------------
 
   let fontSize = getStoredNumber(STORAGE.fontSize, 18);
@@ -454,7 +605,6 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-
   const decreaseFont = $("#decrease-font");
   const increaseFont = $("#increase-font");
 
@@ -474,9 +624,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   applyFontSize();
 
-
   // -----------------------------------------------------
-  // 09. READING THEMES
+  // 15. READING THEMES
   // -----------------------------------------------------
 
   const themeButtons = $$("[data-reading-theme]");
@@ -508,132 +657,18 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem(STORAGE.theme, theme);
   }
 
-
   themeButtons.forEach(button => {
     button.addEventListener("click", () => {
       applyTheme(button.dataset.readingTheme);
     });
   });
 
-
   applyTheme(
     localStorage.getItem(STORAGE.theme) || "dark"
   );
 
-
   // -----------------------------------------------------
-  // 10. BOOKMARKS
-  // -----------------------------------------------------
-
-  function updateBookmark() {
-    if (!bookmarkButton) return;
-
-    const savedChapter = Number(
-      localStorage.getItem(STORAGE.bookmark)
-    );
-
-    const isBookmarked = savedChapter === currentChapter;
-
-    bookmarkButton.textContent = isBookmarked
-      ? "♥ BOOKMARKED"
-      : "♡ BOOKMARK";
-
-    bookmarkButton.classList.toggle(
-      "bookmarked",
-      isBookmarked
-    );
-
-    bookmarkButton.setAttribute(
-      "aria-pressed",
-      String(isBookmarked)
-    );
-  }
-
-
-  if (bookmarkButton) {
-    bookmarkButton.addEventListener("click", () => {
-      const savedChapter = Number(
-        localStorage.getItem(STORAGE.bookmark)
-      );
-
-      if (savedChapter === currentChapter) {
-        localStorage.removeItem(STORAGE.bookmark);
-      } else {
-        localStorage.setItem(
-          STORAGE.bookmark,
-          String(currentChapter)
-        );
-      }
-
-      updateBookmark();
-    });
-  }
-
-
-  // -----------------------------------------------------
-  // 11. READING PROGRESS
-  // -----------------------------------------------------
-
-  const progressBar = $("#reading-progress");
-
-  function updateReadingProgress() {
-    if (!progressBar) return;
-
-    const totalHeight =
-      document.documentElement.scrollHeight -
-      window.innerHeight;
-
-    const progress = totalHeight > 0
-      ? (window.scrollY / totalHeight) * 100
-      : 0;
-
-    progressBar.style.width =
-      `${Math.min(100, Math.max(0, progress))}%`;
-  }
-
-
-  window.addEventListener(
-    "scroll",
-    updateReadingProgress,
-    { passive: true }
-  );
-
-  window.addEventListener(
-    "resize",
-    updateReadingProgress
-  );
-
-
-  // -----------------------------------------------------
-  // 12. STORY READING HISTORY
-  // -----------------------------------------------------
-
-  function updateStoryProgress() {
-    const progressLabel = $("#story-reading-progress");
-
-    if (!progressLabel) return;
-
-    const lastChapter = Number(
-      localStorage.getItem(STORAGE.lastChapter)
-    );
-
-    if (!lastChapter) {
-      progressLabel.textContent = "Not started";
-      return;
-    }
-
-    const total = getAvailableChapters().length;
-
-    progressLabel.textContent =
-      `Last opened: Chapter ${lastChapter} / ${total}`;
-  }
-
-
-  updateStoryProgress();
-
-
-  // -----------------------------------------------------
-  // 13. BACK TO TOP
+  // 16. BACK TO TOP
   // -----------------------------------------------------
 
   const backToTop = $("#back-to-top");
@@ -647,9 +682,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
   // -----------------------------------------------------
-  // 14. FOOTER YEAR
+  // 17. FOOTER YEAR
   // -----------------------------------------------------
 
   const currentYear = $("#current-year");
@@ -659,10 +693,14 @@ document.addEventListener("DOMContentLoaded", () => {
       new Date().getFullYear();
   }
 
+  // -----------------------------------------------------
+  // 18. INITIALIZE THE WEBSITE
+  // -----------------------------------------------------
 
-  // -----------------------------------------------------
-  // 15. RESTORE LAST CHAPTER
-  // -----------------------------------------------------
+  updateChapterNavigation();
+  updateStoryProgress();
+
+  // Restore the last saved chapter number
 
   const savedChapter = Number(
     localStorage.getItem(STORAGE.lastChapter)
@@ -670,43 +708,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (savedChapter && chapters[savedChapter]) {
     currentChapter = savedChapter;
-    updateBookmark();
-    updateChapterNavigation();
   }
 
+  // Navigate only AFTER all variables and functions exist
 
-  // -----------------------------------------------------
-  // 16. CLICKABLE TRANSLATION NOTES
-  // -----------------------------------------------------
+  navigateToHash();
 
-  document.addEventListener("click", event => {
+  // If someone opens #reader directly, load a chapter
 
-    if (!(event.target instanceof Element)) return;
+  if (location.hash === "#reader") {
+    openChapter(
+      savedChapter && chapters[savedChapter]
+        ? savedChapter
+        : 1
+    );
+  }
 
-    const note = event.target.closest(".translation-note");
+  // If the visitor navigates to #reader later, load it too
 
-    // Close other open notes
+  window.addEventListener("hashchange", () => {
+    navigateToHash();
 
-    document.querySelectorAll(".translation-note.active").forEach(item => {
-      if (item !== note) {
-        item.classList.remove("active");
-      }
-    });
+    if (
+      location.hash === "#reader" &&
+      readerContent &&
+      readerContent.children.length === 0
+    ) {
+      const saved = Number(
+        localStorage.getItem(STORAGE.lastChapter)
+      );
 
-    // Toggle the selected note
-
-    if (note) {
-      note.classList.toggle("active");
-      event.stopPropagation();
+      openChapter(
+        saved && chapters[saved] ? saved : 1
+      );
     }
-
   });
 
-
-  // -----------------------------------------------------
-  // 17. READY
-  // -----------------------------------------------------
-
   console.info("fanmei. — the archive is ready.");
-
 });
