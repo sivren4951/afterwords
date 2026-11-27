@@ -231,33 +231,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Render paragraphs and clickable translation notes
 
-  function renderChapterText(text) {
-    if (!readerContent) return;
+function renderChapterText(text) {
+  if (!readerContent) return;
 
-    readerContent.replaceChildren();
+  readerContent.replaceChildren();
 
-    const paragraphs = text
-      .replace(/\r\n/g, "\n")
-      .trim()
-      .split(/\n\s*\n/)
-      .filter(paragraph => paragraph.trim().length > 0);
+  const paragraphs = text
+    .replace(/\r\n/g, "\n")
+    .trim()
+    .split(/\n\s*\n/)
+    .filter(paragraph => paragraph.trim().length > 0);
 
-    const notePattern = /\[\[([\s\S]*?)\|([\s\S]*?)\]\]/g;
+  paragraphs.forEach(paragraph => {
+    const element = document.createElement("p");
+    const pattern = /\[\[([\s\S]*?)\|([\s\S]*?)\]\]/g;
 
-    if (paragraphs.length === 0) {
-      const emptyMessage = document.createElement("p");
-      emptyMessage.textContent = "This chapter is empty.";
-      readerContent.appendChild(emptyMessage);
-      return;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = pattern.exec(paragraph)) !== null) {
+      element.appendChild(
+        document.createTextNode(paragraph.slice(lastIndex, match.index))
+      );
+
+      const note = document.createElement("button");
+      note.type = "button";
+      note.className = "translation-note";
+      note.textContent = match[1];
+      note.dataset.note = match[2];
+
+      element.appendChild(note);
+      lastIndex = pattern.lastIndex;
     }
 
-    paragraphs.forEach(paragraph => {
-      const element = document.createElement("p");
+    element.appendChild(
+      document.createTextNode(paragraph.slice(lastIndex))
+    );
 
-      let lastIndex = 0;
-      let match;
-
-      while ((match = notePattern.exec(paragraph)) !== null) {
+    readerContent.appendChild(element);
+  });
+}
 
         // Add the text before the note
 
