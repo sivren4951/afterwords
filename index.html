@@ -47,31 +47,41 @@
         <span>01 story</span>
       </div>
 
-      <article class="story-card">
+<article class="story-card" style="
+  display: grid;
+  grid-template-columns: 175px minmax(0, 1fr);
+  gap: 35px;
+  align-items: center;
+  padding: 25px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+">
 
-        <img
-  class="story-cover"
-  src="images/sternstunde-cover.jpg"
-  alt="Sternstunde cover"
->
+  <img
+    src="images/sternstunde-cover.jpg"
+    alt="Sternstunde cover"
+    style="
+      display: block;
+      width: 175px;
+      height: 235px;
+      object-fit: cover;
+      max-width: 100%;
+    "
+  >
 
-        <div class="story-information">
-          <p class="story-status">ONGOING</p>
+  <div class="story-information">
+    <p class="story-status">ONGOING</p>
+    <h3>Sternstunde</h3>
+    <p class="original-title">稚楚 · Zhichu</p>
+    <p class="story-description">
+      English fan translation of Sternstunde.
+    </p>
+    <a class="story-link" href="#story">
+      Read translation <span>↗</span>
+    </a>
+  </div>
 
-          <h3>Sternstunde</h3>
-
-          <p class="original-title">稚楚 · Zhichu</p>
-
-          <p class="story-description">
-            English fan translation of Sternstunde.
-          </p>
-
-          <a class="story-link" href="#story">
-            Read translation <span>↗</span>
-          </a>
-        </div>
-
-      </article>
+</article>
 
     </section>
 
