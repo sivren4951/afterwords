@@ -495,3 +495,40 @@ body:not(:has(.subpage:target)) #home {
     font-size: 10px;
   }
 }
+.translation-note {
+  position: relative;
+  display: inline;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px dotted #a99b88;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.translation-note::after {
+  content: attr(data-note);
+  display: none;
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  bottom: calc(100% + 10px);
+  width: 250px;
+  padding: 13px 15px;
+  background: #eee8dc;
+  color: #49443d;
+  border: 1px solid #d8cdbd;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+  font-weight: normal;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+}
+
+.translation-note.active::after {
+  display: block;
+}
